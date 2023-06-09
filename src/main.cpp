@@ -1,6 +1,14 @@
 #include <string>
 #include <iostream>
 
+void minimizacion_distancia(){
+    
+}
+
+
+
+
+
 
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
