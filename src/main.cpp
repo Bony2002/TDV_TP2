@@ -2,7 +2,7 @@
 #include <iostream>
 
 void minimizacion_distancia(){
-    
+    int contador=0;
 }
 
 
