@@ -6,6 +6,31 @@
 #include <typeinfo>
 using namespace std;
 
+void impresora(vector<vector<int>> dist){
+    for(vector<int> v : dist){
+        for(int i : v){
+            cout <<i<<" ";
+        }
+        cout << endl;
+        cout<<"-----------------"<<endl; 
+    }
+
+    // for(vector<int> v : demandas){
+    //     for(int i : v){
+    //         cout <<i<<" ";
+    //     }
+    //     cout << endl; 
+    //     cout<<"-----------------"<<endl; 
+    // }
+
+    // for(int i : capacidades){
+    //     cout << i << " "; 
+    // }
+    // cout << endl; 
+    // cout<<"-----------------"<<endl; 
+}
+
+
 void lector(string filename, vector<vector<int>> &dist, vector<vector<int>> &demandas, vector<int> &capacidades){
     // Guardamos las distancias de los negocios a los depositos en una matriz
     ifstream file(filename);
@@ -43,9 +68,35 @@ void lector(string filename, vector<vector<int>> &dist, vector<vector<int>> &dem
     }
 }
 
-void minimizacion_distancia(){
-    return;
+void heuristica_1(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
+    //Le asignamos a un negocio el deposito que le quede mas cerca
+    vector<vector<int>> asig;
+    vector<int> capaux = capacidades;
+    // ofstream asignaciones("Asignaciones.csv", ofstream::out);
+    for(int j = 0; j < dist[0].size(); j++){
+        int minimo = 99999;
+        int depositoFinal;
+        for(int i = 0; i < dist.size(); i++){
+            if((capaux[i]-demandas[i][j] >= 0) && (dist[i][j] < minimo)){
+                int minimo = dist[i][j];
+                int depositoFinal = i;
+            }
+        }
+        asig[depositoFinal].push_back(j);
+        capaux[depositoFinal] -= demandas[depositoFinal][j];
+    }
+
+    impresora(asig);
+
+    // for(int i = 0; i < dist.size(); i++){
+    //     asignaciones << "Deposito " << i << ",";
+    //     for(int j = 0; j < dist[0].size(); j++){
+    //         asignaciones << asig[i][j] << ",";
+    //     }
+    // }
+    // asignaciones.close();
 }
+
 
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
@@ -54,27 +105,8 @@ int main(int argc, char** argv) {
     vector<vector<int>> dist, demandas;
     vector<int> capacidades;
     lector(filename, dist, demandas, capacidades);
-    for(vector<int> v : dist){
-        for(int i : v){
-            cout <<i<<" ";
-        }
-        cout << endl;
-        cout<<"-----------------"<<endl; 
-    }
-
-    for(vector<int> v : demandas){
-        for(int i : v){
-            cout <<i<<" ";
-        }
-        cout << endl; 
-        cout<<"-----------------"<<endl; 
-    }
-
-    for(int i : capacidades){
-        cout << i << " "; 
-    }
-    cout << endl; 
-    cout<<"-----------------"<<endl; 
+    
+    heuristica_1(dist, demandas, capacidades);
 
     return 0;
 }
