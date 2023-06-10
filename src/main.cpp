@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <typeinfo>
+#include <algorithm>
 using namespace std;
 
 
@@ -42,6 +43,31 @@ void lector(string filename, vector<vector<int>> &dist, vector<vector<int>> &dem
         int z = stoi(mystring);
         capacidades.push_back(z);
     }
+
+    //imprimimos la información
+    cout<<"Distancias"<<endl;
+    for(vector<int> v : dist){
+        for(int i : v){
+            cout <<i<<" ";
+        }
+        cout << endl;
+        cout<<"-----------------"<<endl; 
+    }
+    cout<<"Demandas"<<endl;
+    for(vector<int> v : demandas){
+        for(int i : v){
+            cout <<i<<" ";
+        }
+        cout << endl; 
+        cout<<"-----------------"<<endl; 
+    }
+    cout<<"Capacidades"<<endl;
+    for(int i : capacidades){
+        cout << i << " "; 
+    }
+    cout << endl; 
+    cout<<"-----------------"<<endl; 
+    
 }
 
 void heuristica_1(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
@@ -62,7 +88,39 @@ void heuristica_1(vector<vector<int>> dist, vector<vector<int>> demandas, vector
 
     ofstream asignaciones("asignaciones_heuristica1.txt", std::ofstream::out);
     for(int i = 0; i < asig.size(); i++){
-        for(int j = 0; j < asig[0].size(); j++){
+        for(int j = 0; j < asig[i].size(); j++){
+            string w = to_string(asig[i][j]);
+            asignaciones << w << " ";
+        }
+        asignaciones<<'\n';
+    }
+    asignaciones.close();
+    return;
+}
+
+void heuristica_2(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
+    //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
+    vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
+    vector<int>no_disponibles={};
+    for(int j = 0; j < dist.size(); j++){
+        int suma = 0;
+        //calculas la distancia promedio de cada deposito
+        for(int i = 0; i<dist[0].size(); i++){
+            suma += dist[j][i];
+        }
+        int prom = suma/dist[0].size();
+        for(int i = 0; i < dist[0].size(); i++){
+            if((capacidades[j]-demandas[j][i] >= 0) && (dist[j][i] <= prom) && find(no_disponibles.begin(), no_disponibles.end(), i)==no_disponibles.end()){ //agregas el nogocio al deposito si esta mas cerca que el promedio
+                asig[j].push_back(i);
+                capacidades[j] -= demandas[j][i];
+                no_disponibles.push_back(i);
+            }
+        }
+    }
+
+    ofstream asignaciones("asignaciones_heuristica2.txt", std::ofstream::out);
+    for(int i = 0; i < asig.size(); i++){
+        for(int j = 0; j < asig[i].size(); j++){
             string w = to_string(asig[i][j]);
             asignaciones << w << " ";
         }
@@ -81,29 +139,9 @@ int main(int argc, char** argv) {
     vector<int> capacidades;
     lector(filename, dist, demandas, capacidades);
 
-    for(vector<int> v : dist){
-        for(int i : v){
-            cout <<i<<" ";
-        }
-        cout << endl;
-        cout<<"-----------------"<<endl; 
-    }
-
-    for(vector<int> v : demandas){
-        for(int i : v){
-            cout <<i<<" ";
-        }
-        cout << endl; 
-        cout<<"-----------------"<<endl; 
-    }
-
-    for(int i : capacidades){
-        cout << i << " "; 
-    }
-    cout << endl; 
-    cout<<"-----------------"<<endl; 
-    
     heuristica_1(dist, demandas, capacidades);
+    heuristica_2(dist, demandas, capacidades);
+
 
     return 0;
 }
