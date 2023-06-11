@@ -1,0 +1,29 @@
+---
+title: ""
+output: html_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TP2: Logística centralizada de primera milla
+
+### Introducción al problema
+
+La problemática a abordar se trata de encontrar la manera óptima, o en su defecto efectiva, de realizar una asignación. Trabajaremos sobre un caso particular en el cual buscamos asignar un conjunto $N$ de negocios a un conjunto $M$ de depósitos. Cada negocio posee una distancia a cada depósito, denotada por $c_{ij}$, con $i\in{M}$ y $j \in{N}$. También posee una demanda, $d_{ij}$ que se refiere a la cantidad de stock que el negocio pedirá de dicho depósito. Por último, cada depósito posee un capacidad, denotada por $c_i$. En el este caso particular, los negocios no pueden pedir stock de distintos depósitos, por lo cual serán asignados tan solo a uno de estos. Asimismo, la demanda de cada negocio será la misma para todo depósito, por lo cual la variable $d_{ij}$ no depende de $i$ y podría escribirse como $d_j$. Consideramos una solución óptima al problema de asignación a aquella que minimiza la distancia entre cada negocio y cada depósito, teniendo en cuenta no exceder la capacidad de estos últimos.
+
+El tipo de problema con el cual trataremos es conocido como *GAP* (Generalized Assignment Problem), y se encuentra en la categoría NP-Hard. Esto quiere decir que todo problema perteneciente a la clase NP puede ser reducido polinomialmente a *GAP*. Además, un problema NP-Hard no necesariamente pertenece a NP, es decir que no necesariamente existe un algoritmo polinomial para verificar un certificado positivo de una instancia el problema. Si encontraramos un algoritmo polinomial para *GAP* entonces encontraríamos una solución polinomial para todo problema en NP y demostraríamos que P = NP. De todos modo, eso aún no ha sucedido y es por eso que se desarrollan heurísticas para resolver el problema *GAP*.
+
+### Heurísticas
+
+#### Heurística 1
+
+En primer lugar diseñamos e implementamos una heurística cuyo funcionamiento es el siguiente: por cada negocio buscamos el depósito más cercano, es decir aquel cuyo $c_{ij}$ sea el menor, y asignamos el negocio a dicho depósito. Asimismo vamos disminuyendo la capacidad $c_j$ del depósito en función a la demanda $d_{ij}$ de la asignación. En caso de que el depósito de menor distancia a un negocio no tenga capacidad restante suficiente, este sería asignado al próximo depósito más cercano.
+
+Claramente no encontraremos la solución óptima, pero encontraremos una solución que creemos que tendrá cierto grado de efectividad.
+
+#### Heurística 2
+
+En segundo lugar desarollamos una heurística que funciona del siguiente modo: por cada depósito asigna aquellos negocios que se encuentren cerca, mientras la capacidad del depósito lo permita. Es importante asegurarse que no se evalúen aquellos negocios que ya han sido asignados. Además, fue necesario encontrar un modo de definir qué quiere decir que un negocio está cerca de un depósito. Para eso, calculamos el promedio de distancia de cada depósito con los negocios y definimos que un negocio $i$ se encuentra cerca de un depósito $j$ si $c_{ij}$ es menor al promedio de distancias del depósito $j$.
