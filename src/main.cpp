@@ -72,6 +72,7 @@ void lector(string filename, vector<vector<int>> &dist, vector<vector<int>> &dem
 
 void heuristica_1(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
     //Le asignamos a un negocio el deposito que le quede mas cerca
+    // HAY QUE HACER: Ordenar a los negocios de menor a mayor por la distancia que tengan con su deposito mas cercano
     vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
     for(int j = 0; j < dist[0].size(); j++){
         int minimo = 99999;
@@ -119,6 +120,37 @@ void heuristica_2(vector<vector<int>> dist, vector<vector<int>> demandas, vector
     }
 
     ofstream asignaciones("asignaciones_heuristica2.txt", std::ofstream::out);
+    for(int i = 0; i < asig.size(); i++){
+        for(int j = 0; j < asig[i].size(); j++){
+            string w = to_string(asig[i][j]);
+            asignaciones << w << " ";
+        }
+        asignaciones<<'\n';
+    }
+    asignaciones.close();
+    return;
+}
+
+void heuristica_3(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
+    //Le asignamos a un negocio el deposito que le quede mas cerca
+    vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
+    //La idea de este algoritmo es ordenar los negocios de mayor a menor por el promedio de la diferencia entre
+    // un deposito i y i-1, siendo el deposito 0 el deposito mas cerca y m el deposito mas lejos.
+
+    for(int j = 0; j < dist[0].size(); j++){
+        int minimo = 99999;
+        int depositoFinal = 0;
+        for(int i = 0; i < dist.size(); i++){
+            if((capacidades[i]-demandas[i][j] >= 0) && (dist[i][j] < minimo)){
+                minimo = dist[i][j];
+                depositoFinal = i;
+            }
+        }
+        asig[depositoFinal].push_back(j);
+        capacidades[depositoFinal] -= demandas[depositoFinal][j];
+    } 
+
+    ofstream asignaciones("asignaciones_heuristica3.txt", std::ofstream::out);
     for(int i = 0; i < asig.size(); i++){
         for(int j = 0; j < asig[i].size(); j++){
             string w = to_string(asig[i][j]);
