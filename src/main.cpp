@@ -174,12 +174,15 @@ int main(int argc, char** argv) {
     // heuristica_1(dist, demandas, capacidades);
     // heuristica_2(dist, demandas, capacidades);
 
-    AssignmentInstance instance (filename);
-    instance.heuristica1();
-    instance.busqueda2();
+    // AssignmentInstance instance (filename);
+    // instance.heuristica1();
+    // instance.busqueda2();
 
-    AssignmentInstance instance2 (filename);
-    instance2.heuristica2();
-    instance2.busqueda1();
+    // AssignmentInstance instance2 (filename);
+    // instance2.heuristica2();
+    // instance2.busqueda1();
+
+    AssignmentInstance Instance3 (filename);
+    Instance3.metaheuristica();
     return 0;
 }

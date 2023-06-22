@@ -67,34 +67,65 @@ void AssignmentInstance::heuristica1(){
         this->valor_objetivo+=this->distancias[depositoFinal][j];
         this->correspondencia[j]=depositoFinal;
     } 
+    for(int i = 0; i<correspondencia.size();i++){
+        if(correspondencia[i]==-1){
+            int d_max = 0;
+            for( int j = 0; j <m; j++){
+                d_max = max(d_max, distancias[j][i]);
+            }
+            this->valor_objetivo += 3*d_max;
+        }
+    }
     crear_archivo("asignaciones_heuristicas_1_clase.txt");
     cout<<this->valor_objetivo<<endl;
 }
 
-void AssignmentInstance::heuristica2(){
-        //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
-    vector<int>no_disponibles={};
-    for(int j = 0; j < this->distancias.size(); j++){
-        int suma = 0;
-        //calculas la distancia promedio de cada deposito
-        for(int i = 0; i<this->distancias[0].size(); i++){
-            suma += this->distancias[j][i];
-        }
-        int prom = suma/this->distancias[0].size();
-        for(int i = 0; i < this->distancias[0].size(); i++){
-            //agregas el nogocio al deposito si esta mas cerca que el promedio
-            if((this->capacidades[j]-this->demandas[j][i] >= 0) && (this->distancias[j][i] <= prom) && find(no_disponibles.begin(), no_disponibles.end(), i)==no_disponibles.end()){ 
-                this->asignaciones[j].push_back(i);
-                this->capacidades[j] -= this->demandas[j][i];
-                this->correspondencia[i] = j;
-                no_disponibles.push_back(i);
-                this->valor_objetivo+=this->distancias[j][i];
+vector<int> AssignmentInstance::ordenamiento(vector<int> dist){
+    vector<int> ordenado={dist[0]};
+    for(int i=1;i<this->n;i++){
+
+        for(int j=0;j<ordenado.size();j++){
+
+            if(dist[i]<=dist[ordenado[j]]){
+
+                ordenado.insert(ordenado.begin()+j,i);
+                break;
             }
+        }
+        if(dist[i]>dist[ordenado[ordenado.size()-1]]){
+            ordenado.push_back(i);
+        }
+    }
+    return ordenado;
+}
+
+void AssignmentInstance::heuristica2(){
+    //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
+    vector<int>dist_a_dep = {};
+    vector<int>no_disponibles={};
+    for(int i = 0; i<m; i++){
+        dist_a_dep = ordenamiento(distancias[i]);
+        for(int j = 0; j<n; j++){
+            if(this->capacidades[i]-this->demandas[i][dist_a_dep[j]] >= 0 && find(no_disponibles.begin(), no_disponibles.end(), dist_a_dep[j])==no_disponibles.end()){ 
+                this->asignaciones[i].push_back(dist_a_dep[j]);
+                this->capacidades[i] -= this->demandas[i][dist_a_dep[j]];
+                this->correspondencia[dist_a_dep[j]] = i;
+                this->valor_objetivo+=this->distancias[i][dist_a_dep[j]];
+                no_disponibles.push_back(dist_a_dep[j]);
+            }
+        }
+    }
+    for(int i = 0; i<correspondencia.size();i++){
+        if(correspondencia[i]==-1){
+            int d_max = 0;
+            for( int j = 0; j <m; j++){
+                d_max = max(d_max, distancias[j][i]);
+            }
+            this->valor_objetivo += 3*d_max;
         }
     }
     crear_archivo("asignaciones_heuristicas_2_clase.txt");
     cout<<this->valor_objetivo<<endl;
-
 }
 
 // void AssignmentInstance::busqueda1(){
@@ -123,19 +154,28 @@ void AssignmentInstance::heuristica2(){
 
 
 void AssignmentInstance::busqueda1(){
+    // cout<<correspondencia.size()<<endl;
     for(int i=0; i<this->n;i++){
         int j=0;
-        while(j<m){
-            if(j!=correspondencia[i] && this->distancias[j][i]<this->distancias[correspondencia[i]][i] && this->demandas[j][i]<this->capacidades[j]){
-                this->valor_objetivo-=(this->distancias[correspondencia[i]][i]-this->distancias[j][i]);
-                this->capacidades[j]-=this->demandas[j][i];
-                this->capacidades[correspondencia[i]]+=this->demandas[correspondencia[i]][i];
-                this->asignaciones[correspondencia[i]].erase(find(asignaciones[correspondencia[i]].begin(), asignaciones[correspondencia[i]].end(), i));
-                this->asignaciones[j].push_back(i);
-                this->correspondencia[i]=j;
-                break;
+        // Deberiamos tener en cuenta el caso que no esta en ningun deposito.
+        if(correspondencia[i]!=-1){
+            while(j<m){
+                if(j!=correspondencia[i] && this->distancias[j][i]<this->distancias[correspondencia[i]][i] && this->demandas[j][i]<this->capacidades[j]){
+                    this->valor_objetivo-=(this->distancias[correspondencia[i]][i]-this->distancias[j][i]);
+                    this->capacidades[j]-=this->demandas[j][i];
+                    // cout<<"B"<<endl;
+                    this->capacidades[correspondencia[i]]+=this->demandas[correspondencia[i]][i];
+                    // cout<<"C"<<endl;
+                    this->asignaciones[correspondencia[i]].erase(find(asignaciones[correspondencia[i]].begin(), asignaciones[correspondencia[i]].end(), i));
+                    // cout<<"D"<<endl;
+                    this->asignaciones[j].push_back(i);
+                    // cout<<"E"<<endl;
+                    this->correspondencia[i]=j;
+                    //cout<<"F"<<endl;
+                    break;
+                }
+                j+=1;
             }
-            j+=1;
         }
     }
     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
@@ -147,7 +187,9 @@ void AssignmentInstance::busqueda2(){
     for(int i=0;i<this->n;i++){
         for(int j=0;j<this->n;j++){
             if(this->correspondencia[i]!=this->correspondencia[j]){
+                // cout<<"lara hace pis"<<endl;
                 if(condiciones_swap(i,j)){
+                    // cout<<"lara hace caca"<<endl;
                     this->capacidades[this->correspondencia[i]] += this->demandas[this->correspondencia[i]][i];
                     this->capacidades[this->correspondencia[i]] -= this->demandas[this->correspondencia[i]][j];
                     this->capacidades[this->correspondencia[j]] += this->demandas[this->correspondencia[j]][j];
@@ -166,10 +208,6 @@ void AssignmentInstance::busqueda2(){
     crear_archivo("asignaciones_heuristicas_1_busqueda_local.txt");
 }
 
-// void AssignmentInstace::metaheuristica(){
-    
-// }
-
 
 void AssignmentInstance::crear_archivo(string nombre){
     ofstream archivo(nombre, std::ofstream::out);
@@ -185,8 +223,36 @@ void AssignmentInstance::crear_archivo(string nombre){
 }
 
 bool AssignmentInstance::condiciones_swap(int i, int j){
+    if(correspondencia[i]==-1 || correspondencia[j]==-1){return false;}
     bool condicion1= (this->distancias[this->correspondencia[i]][i] + this->distancias[this->correspondencia[j]][j])> (this->distancias[this->correspondencia[i]][j] + this->distancias[this->correspondencia[j]][i]);
     bool condicion2= this->demandas[this->correspondencia[i]][j]< this->capacidades[this->correspondencia[i]]+this->demandas[this->correspondencia[i]][i];
     bool condicion3= this->demandas[this->correspondencia[j]][i]< this->capacidades[this->correspondencia[j]]+this->demandas[this->correspondencia[j]][j];
     return condicion1 && condicion2 && condicion3;
 }
+
+void AssignmentInstance::metaheuristica(){
+    heuristica2();
+    bool mejora=true;
+    int actual;
+    while(mejora){
+        actual=this->valor_objetivo;
+        bool relocate=true;
+        while(relocate){
+            int reloc=this->valor_objetivo;
+            busqueda1();
+            cout<<"Reloc:"<<valor_objetivo<<endl;
+            if(reloc==valor_objetivo){relocate=false;}
+        }
+        bool swape=true;
+        while(swape){
+            int spe=this->valor_objetivo;
+            cout<<"aca estoy"<<endl;
+            busqueda2();
+            cout<<"Spe:"<<valor_objetivo<<endl;
+            if(spe==valor_objetivo){swape=false;}
+        }
+        if (valor_objetivo==actual){mejora=false;}
+    }
+
+}
+

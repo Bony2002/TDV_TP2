@@ -20,6 +20,7 @@ class AssignmentInstance{
     void busqueda1();
     void busqueda2();
     void metaheuristica();
+    vector<int> ordenamiento(vector<int> distancias);
     void crear_archivo(string nombre);
     bool condiciones_swap(int i, int j);
 
