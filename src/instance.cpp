@@ -246,7 +246,6 @@ void AssignmentInstance::metaheuristica(){
         bool swape=true;
         while(swape){
             int spe=this->valor_objetivo;
-            cout<<"aca estoy"<<endl;
             busqueda2();
             cout<<"Spe:"<<valor_objetivo<<endl;
             if(spe==valor_objetivo){swape=false;}
