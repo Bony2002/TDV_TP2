@@ -86,6 +86,7 @@ void AssignmentInstance::heuristica2(){
             if((this->capacidades[j]-this->demandas[j][i] >= 0) && (this->distancias[j][i] <= prom) && find(no_disponibles.begin(), no_disponibles.end(), i)==no_disponibles.end()){ 
                 this->asignaciones[j].push_back(i);
                 this->capacidades[j] -= this->demandas[j][i];
+                this->correspondencia[i] = j;
                 no_disponibles.push_back(i);
                 this->valor_objetivo+=this->distancias[j][i];
             }
@@ -96,30 +97,52 @@ void AssignmentInstance::heuristica2(){
 
 }
 
+// void AssignmentInstance::busqueda1(){
+//     for(int i=0; i<this->m;i++){
+//         int j=0;
+//         int flag;
+//         while(j<asignaciones[i].size()){
+//             flag=0;
+//             for(int d=0;d<this->m;d++){
+//                 if(d!=i && this->distancias[d][this->asignaciones[i][j]]<this->distancias[i][this->asignaciones[i][j]] && this->demandas[d][asignaciones[i][j]]<this->capacidades[d] ){
+//                     this->valor_objetivo-=(this->distancias[i][this->asignaciones[i][j]]-this->distancias[d][this->asignaciones[i][j]]);
+//                     this->asignaciones[d].push_back(this->asignaciones[i][j]);
+//                     this->capacidades[d]-=this->demandas[d][this->asignaciones[i][j]];
+//                     this->capacidades[i]+=this->demandas[i][this->asignaciones[i][j]];
+//                     this->asignaciones[i].erase(this->asignaciones[i].begin()+j);
+//                     flag=1;
+//                     break;
+//                 }
+//             }
+//             if(flag==0){j++;}
+//         }
+//     }
+//     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
+//     cout<<this->valor_objetivo<<endl;
+// }
+
+
 void AssignmentInstance::busqueda1(){
-    for(int i=0; i<this->m;i++){
+    for(int i=0; i<this->n;i++){
         int j=0;
-        int flag;
-        while(j<asignaciones[i].size()){
-            flag=0;
-            for(int d=0;d<this->m;d++){
-                if(d!=i && this->distancias[d][this->asignaciones[i][j]]<this->distancias[i][this->asignaciones[i][j]] && this->demandas[d][asignaciones[i][j]]<this->capacidades[d] ){
-                    this->valor_objetivo-=(this->distancias[i][this->asignaciones[i][j]]-this->distancias[d][this->asignaciones[i][j]]);
-                    this->asignaciones[d].push_back(this->asignaciones[i][j]);
-                    this->capacidades[d]-=this->demandas[d][this->asignaciones[i][j]];
-                    this->capacidades[i]+=this->demandas[i][this->asignaciones[i][j]];
-                    this->asignaciones[i].erase(this->asignaciones[i].begin()+j);
-                    flag=1;
-                    break;
-                }
+        while(j<m){
+            if(j!=correspondencia[i] && this->distancias[j][i]<this->distancias[correspondencia[i]][i] && this->demandas[j][i]<this->capacidades[j]){
+                this->valor_objetivo-=(this->distancias[correspondencia[i]][i]-this->distancias[j][i]);
+                this->capacidades[j]-=this->demandas[j][i];
+                this->capacidades[correspondencia[i]]+=this->demandas[correspondencia[i]][i];
+                this->asignaciones[correspondencia[i]].erase(find(asignaciones[correspondencia[i]].begin(), asignaciones[correspondencia[i]].end(), i));
+                this->asignaciones[j].push_back(i);
+                this->correspondencia[i]=j;
+                break;
             }
-            if(flag==0){j++;}
+            j+=1;
         }
     }
     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
     cout<<this->valor_objetivo<<endl;
-
 }
+
+
 void AssignmentInstance::busqueda2(){
     for(int i=0;i<this->n;i++){
         for(int j=0;j<this->n;j++){
@@ -142,6 +165,11 @@ void AssignmentInstance::busqueda2(){
     cout<<this->valor_objetivo<<endl;
     crear_archivo("asignaciones_heuristicas_1_busqueda_local.txt");
 }
+
+// void AssignmentInstace::metaheuristica(){
+    
+// }
+
 
 void AssignmentInstance::crear_archivo(string nombre){
     ofstream archivo(nombre, std::ofstream::out);

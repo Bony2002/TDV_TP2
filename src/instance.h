@@ -19,6 +19,7 @@ class AssignmentInstance{
     void heuristica2();
     void busqueda1();
     void busqueda2();
+    void metaheuristica();
     void crear_archivo(string nombre);
     bool condiciones_swap(int i, int j);
 
