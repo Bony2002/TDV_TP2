@@ -59,3 +59,15 @@ Este operador no aportará una mejora con toda heurística posible como base par
 El operador relocate nos permite asignar los negocios que no era posible asignar a ningún depósito dadas las capacidades y las asignaciones ya realizadas. Se sufría una gran penalización sobre el valor objetivo por cada negocio no asignado, por lo cual el hecho de poder incluirlos en la solución mejora considerablemente el valor objetivo. Por supuesto, no se podrán ubicar dichos negocios sin antes haberse realizados otros relocate que generen suficiente espacio en algún depósito.
 
 #### Operador 2: swap
+
+El segundo operador que diseñamos es un swap. Este itera por los negocios, en busca de dos negocios que al intercambiar el depósito en el que se encuentran el valor objetivo disminuya, respetando las capacidades. Utilizamos de nuevo el criterio de *first improvement*. Este operador no servirá para añadir los negocios no asignados a la solución, ya que swapearlos simplemente añadiría un negocio para quitar otro.
+
+Para aceptar una nueva solución debemos evaluar 2 condiciones, con $i_1$ el depósito A, $i_2$ el depósito B depósito, $j_1$ el negocio A (asignado al depósito A) y $j_2$ el negocio B (asignado al depósito B):
+
+-   $c_{i_1j_1} + c_{i_2j_2} > c_{i_1j_2} + c_{i_2j_1}$
+
+-   $d_{i_1j_2} \leq \bar{c}_{i_1} + d_{i_1j_1}$
+
+-   $d_{i_2j_1} \leq \bar{c}_{i_2}+d_{i_2j_2}$
+
+Con $\bar{c}_k$ la capacidad restante del depósito $k$.
