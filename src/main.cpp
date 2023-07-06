@@ -87,9 +87,9 @@ int main(int argc, char** argv) {
     AssignmentInstance Instance4 (realfile);
     Instance4.metaheuristica(false);
     cout<<Instance4.valor_objetivo<<endl;
-    // generadorCSV(archivoA,directorioA);
-
-
+    generadorCSV(archivoA,directorioA);
+    generadorCSV(archivoB,directorioB);
+    generadorCSV(archivoE,directorioE);
     
     return 0;
 
