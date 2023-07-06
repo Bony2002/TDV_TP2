@@ -1,7 +1,7 @@
-Dataset,Valor Objetivo Heruistica 1,Valor Objetivo Heuristica 2,Valor Objetivo Heuristica 1 + Busqueda Local 1,Valor Objetivo Heuristica 1 + Busqueda Local 2,Valor Objetivo Heuristica 2 + Busqueda Local 1,Valor Objetivo Heuristica 2 + Busqueda Local 2,Metaheuristica1,Metaheuristica2
-instances/gap/gap_a/a05100,1709,1951,1709,1700,1750,1789,1700,1701
-instances/gap/gap_a/a05200,3259,3838,3259,3238,3384,3318,3238,3238
-instances/gap/gap_a/a10100,1390,1727,1390,1364,1478,1483,1364,1379
-instances/gap/gap_a/a10100,1390,1727,1390,1364,1478,1483,1364,1379
-instances/gap/gap_a/a20100,1170,1589,1170,1168,1345,1354,1167,1161
-instances/gap/gap_a/a20200,2371,2930,2371,2352,2597,2588,2351,2353
+Dataset,Valor Objetivo Heruistica 1, Tiempo Heuristica 1, Valor Objetivo Heuristica 2, Tiempo Heuristica 2, Valor Objetivo Heuristica 1 + Busqueda Local 1, Tiempo Heuristica 1 + Busqueda Local 1, Valor Objetivo Heuristica 1 + Busqueda Local 2, Tiempo Heuristica 1 + Busqueda Local 2, Valor Objetivo Heuristica 2 + Busqueda Local 1, Tiempo Heuristica 2 + Busqueda Local 1, Valor Objetivo Heuristica 2 + Busqueda Local 2, Tiempo Heuristica 2 + Busqueda Local 2, Metaheuristica1, Tiempo Metaheuristica1, Metaheuristica2, Tiempo Metaheuristica2
+instances/gap/gap_a/a05100,1709,277868,1951,844975,1709,277868,1700,1.37051e+06,1750,844975,1789,1.93762e+06,1700,4.23699e+06,1701,5.18833e+06
+instances/gap/gap_a/a05200,3259,292646,3838,1.31074e+06,3259,292646,3238,5.49594e+06,3384,1.31074e+06,3318,6.51404e+06,3238,1.97703e+07,3238,1.35008e+07
+instances/gap/gap_a/a10100,1390,170103,1727,1.04033e+06,1390,170103,1364,1.41003e+06,1478,1.04033e+06,1483,2.28025e+06,1364,6.5269e+06,1379,1.0194e+07
+instances/gap/gap_a/a10200,2670,505591,3271,2.84515e+06,2670,505591,2634,6.04714e+06,2820,2.84515e+06,2882,8.3867e+06,2633,1.62199e+07,2634,1.55885e+07
+instances/gap/gap_a/a20100,1170,237571,1589,1.49262e+06,1170,237571,1168,1.89466e+06,1345,1.49262e+06,1354,3.1497e+06,1167,6.03061e+06,1161,6.40686e+06
+instances/gap/gap_a/a20200,2371,611232,2930,5.31061e+06,2371,611232,2352,4.30431e+06,2597,5.31061e+06,2588,9.00369e+06,2351,1.89939e+07,2353,2.89458e+07

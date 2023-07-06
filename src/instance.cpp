@@ -64,17 +64,20 @@ void AssignmentInstance::heuristica1(){
     auto begin = std::chrono::high_resolution_clock::now();
     for(int j = 0; j < this->distancias[0].size(); j++){ //iteramos por los negocios
         double minimo = 99999;
-        int depositoFinal = 0;
+        int depositoFinal = -1;
         for(int i = 0; i < this->distancias.size(); i++){ //iteramos por los depósitos
             if((this->capacidades[i]-this->demandas[i][j] >= 0) && (this->distancias[i][j] < minimo)){ //vemos si el la demanda del negocio no supera la capacidad del deposito y si este es el deposito más cercano al negocio
                 minimo = this->distancias[i][j];
                 depositoFinal = i;
             }
         }
-        this->asignaciones[depositoFinal].push_back(j);//agregamos el negocio j a su depósito más cercano
-        this->capacidades[depositoFinal] -= this->demandas[depositoFinal][j];//actualizamos la capacidad del deposito
-        this->valor_objetivo+=this->distancias[depositoFinal][j];//actualizamos el valor objetivo
-        this->correspondencia[j]=depositoFinal;
+        if(depositoFinal!=-1){
+            this->asignaciones[depositoFinal].push_back(j);//agregamos el negocio j a su depósito más cercano
+            this->capacidades[depositoFinal] -= this->demandas[depositoFinal][j];//actualizamos la capacidad del deposito
+            this->valor_objetivo+=this->distancias[depositoFinal][j];//actualizamos el valor objetivo
+            this->correspondencia[j]=depositoFinal;
+        }
+
     } 
      
     for(int i = 0; i<correspondencia.size();i++){//penalizo los negocios no asignados
