@@ -29,6 +29,7 @@ class AssignmentInstance{
     vector<vector<double>> distancias;
     vector<vector<int>> demandas;
     vector<int> capacidades;
+    vector<int> tiempo;
     int n;
     int m;
     double valor_objetivo;
