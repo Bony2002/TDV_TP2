@@ -5,7 +5,7 @@ void generadorCSV(string filename, vector<string> directorio){
         
         std::fstream fout;
         fout.open(filename, ios::out);
-        fout<<"Dataset,Valor Objetivo Heruistica 1,Valor Objetivo Heuristica 2,Valor Objetivo Heuristica 1 + Busqueda Local 1,Valor Objetivo Heuristica 1 + Busqueda Local 2,Valor Objetivo Heuristica 2 + Busqueda Local 1,Valor Objetivo Heuristica 2 + Busqueda Local 2,Metaheuristica1,Metaheuristica2\n";
+        fout<<"Dataset,Valor Objetivo Heruistica 1, Tiempo Heuristica 1, Valor Objetivo Heuristica 2, Tiempo Heuristica 2, Valor Objetivo Heuristica 1 + Busqueda Local 1, Tiempo Heuristica 1 + Busqueda Local 1, Valor Objetivo Heuristica 1 + Busqueda Local 2, Tiempo Heuristica 1 + Busqueda Local 2, Valor Objetivo Heuristica 2 + Busqueda Local 1, Tiempo Heuristica 2 + Busqueda Local 1, Valor Objetivo Heuristica 2 + Busqueda Local 2, Tiempo Heuristica 2 + Busqueda Local 2, Metaheuristica1, Tiempo Metaheuristica1, Metaheuristica2, Tiempo Metaheuristica2\n";
         for(string i : directorio){
             AssignmentInstance Instance1(i);
             Instance1.heuristica1();
@@ -38,7 +38,25 @@ void generadorCSV(string filename, vector<string> directorio){
             Instance6.metaheuristica(false);
             double meta2 = Instance6.valor_objetivo;
 
-            fout << i <<","<< heur1 <<","<< heur2 <<","<< heur1busq1 <<","<< heur1busq2 <<","<< heur2busq1 <<","<< heur2busq2 <<","<< meta1 <<","<<meta2<<"\n";
+
+            //Tiempos 
+            double t1 = Instance1.tiempo[0];
+            double t2 = Instance3.tiempo[1];
+            double tb1 = Instance2.tiempo[2];
+            double tb2 = Instance4.tiempo[3];
+            double tmeta1 = Instance5.tiempo[4];
+            double tmeta2 = Instance6.tiempo[4];
+
+            double t1t1 = t1+tb1;
+            double t1t2 = t1+tb2;
+            double t2t1 = t2+tb1;
+            double t2t2 = t2+tb2;
+            
+
+            fout << i <<","<< heur1 <<","
+            << t1 <<","<< heur2 <<","<< t2 <<","<< heur1busq1 <<","<< t1t1  <<","<<
+            heur1busq2 <<","<< t1t2 <<","<< heur2busq1 <<","<< t2t1 <<","<< 
+            heur2busq2 <<","<< t2t2 <<","<< meta1 <<","<< tmeta1 <<","<< meta2 <<","<< tmeta2 <<"\n";
         }
         fout.close();
     }
