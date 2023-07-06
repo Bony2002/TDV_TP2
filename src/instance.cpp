@@ -1,7 +1,7 @@
 #include "instance.h"
 
 AssignmentInstance::AssignmentInstance(string filename){
-        // Guardamos las distancias de los negocios a los depositos en una matriz
+    // Guardamos las distancias de los negocios a los depositos en una matriz
     this->distancias={};
     this->capacidades={};
     this->demandas={};
@@ -48,41 +48,49 @@ AssignmentInstance::AssignmentInstance(string filename){
     this->n=distancias[0].size();
     vector<int> aux2(this->n,-1);
     this->correspondencia=aux2;
+
+    int d_max = 0;
+    for(int i = 0; i<n;i++){ //calculo la distancia máxima entre un negocio y un depósito
+        for( int j = 0; j <m; j++){
+            d_max = max(d_max, distancias[j][i]);
+        }
+    }
+    this->dist_max = d_max;
 }
 
 
 void AssignmentInstance::heuristica1(){
 
-    for(int j = 0; j < this->distancias[0].size(); j++){
+    for(int j = 0; j < this->distancias[0].size(); j++){ //iteramos por los negocios
         int minimo = 99999;
         int depositoFinal = 0;
-        for(int i = 0; i < this->distancias.size(); i++){
-            if((this->capacidades[i]-this->demandas[i][j] >= 0) && (this->distancias[i][j] < minimo)){
+        for(int i = 0; i < this->distancias.size(); i++){ //iteramos por los depósitos
+            if((this->capacidades[i]-this->demandas[i][j] >= 0) && (this->distancias[i][j] < minimo)){ //vemos si el la demanda del negocio no supera la capacidad del deposito y si este es el deposito más cercano al negocio
                 minimo = this->distancias[i][j];
                 depositoFinal = i;
             }
         }
-        this->asignaciones[depositoFinal].push_back(j);
-        this->capacidades[depositoFinal] -= this->demandas[depositoFinal][j];
-        this->valor_objetivo+=this->distancias[depositoFinal][j];
+        this->asignaciones[depositoFinal].push_back(j);//agregamos el negocio j a su depósito más cercano
+        this->capacidades[depositoFinal] -= this->demandas[depositoFinal][j];//actualizamos la capacidad del deposito
+        this->valor_objetivo+=this->distancias[depositoFinal][j];//actualizamos el valor objetivo
         this->correspondencia[j]=depositoFinal;
     } 
-    for(int i = 0; i<correspondencia.size();i++){
+     
+    for(int i = 0; i<correspondencia.size();i++){//penalizo los negocios no asignados
         if(correspondencia[i]==-1){
-            int d_max = 0;
-            for( int j = 0; j <m; j++){
-                d_max = max(d_max, distancias[j][i]);
-            }
-            this->valor_objetivo += 3*d_max;
+            this->valor_objetivo += 3*this->dist_max;
         }
-    }
-    crear_archivo("asignaciones_heuristicas_1_clase.txt");
+    }      
+    crear_archivo("asignaciones_heuristicas_1_clase.txt");//generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
 }
 
 vector<int> AssignmentInstance::ordenamiento(vector<int> dist){
+    //el objetivo de esta función auxiliar es por cada depósito ordenar los negocios según cuan cerca están de este
+    //dist son las distancias de los negocios a un depósito x
+    //observemos que el vector ordenado no contiene las distancias si no que los índices de los negocios
     vector<int> ordenado={dist[0]};
-    for(int i=1;i<this->n;i++){
+    for(int i=1;i<this->n;i++){ // iteramos por los negocios, ordenado por distancia  al depósito, de menor a mayor
 
         for(int j=0;j<ordenado.size();j++){
 
@@ -103,28 +111,24 @@ void AssignmentInstance::heuristica2(){
     //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
     vector<int>dist_a_dep = {};
     vector<int>no_disponibles={};
-    for(int i = 0; i<m; i++){
-        dist_a_dep = ordenamiento(distancias[i]);
-        for(int j = 0; j<n; j++){
-            if(this->capacidades[i]-this->demandas[i][dist_a_dep[j]] >= 0 && find(no_disponibles.begin(), no_disponibles.end(), dist_a_dep[j])==no_disponibles.end()){ 
-                this->asignaciones[i].push_back(dist_a_dep[j]);
-                this->capacidades[i] -= this->demandas[i][dist_a_dep[j]];
+    for(int i = 0; i<m; i++){//iteramos por los depositos
+        dist_a_dep = ordenamiento(distancias[i]); //ordenamos por cercanía los negocios en relación al depósito i
+        for(int j = 0; j<n; j++){//iteramos por los negocios
+            if(this->capacidades[i]-this->demandas[i][dist_a_dep[j]] >= 0 && find(no_disponibles.begin(), no_disponibles.end(), dist_a_dep[j])==no_disponibles.end()){ //evalúo si el negocio tiene una demanda menor a la capacidad del deósito y si el negocio no ha sido asignado aún
+                this->asignaciones[i].push_back(dist_a_dep[j]); //asigno el negocio al depósito i
+                this->capacidades[i] -= this->demandas[i][dist_a_dep[j]]; //actualizo las capacidades
                 this->correspondencia[dist_a_dep[j]] = i;
-                this->valor_objetivo+=this->distancias[i][dist_a_dep[j]];
-                no_disponibles.push_back(dist_a_dep[j]);
+                this->valor_objetivo+=this->distancias[i][dist_a_dep[j]]; //actualizo el valor objetivo
+                no_disponibles.push_back(dist_a_dep[j]); //marco como no disponible el negocio ya asignado
             }
         }
-    }
-    for(int i = 0; i<correspondencia.size();i++){
+    }        
+    for(int i = 0; i<correspondencia.size();i++){//penalizo los negocios no asignados
         if(correspondencia[i]==-1){
-            int d_max = 0;
-            for( int j = 0; j <m; j++){
-                d_max = max(d_max, distancias[j][i]);
-            }
-            this->valor_objetivo += 3*d_max;
+            this->valor_objetivo += 3*this->dist_max;
         }
-    }
-    crear_archivo("asignaciones_heuristicas_2_clase.txt");
+    }      
+    crear_archivo("asignaciones_heuristicas_2_clase.txt"); //generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
 }
 
@@ -155,27 +159,32 @@ void AssignmentInstance::heuristica2(){
 
 void AssignmentInstance::busqueda1(){
     // cout<<correspondencia.size()<<endl;
-    for(int i=0; i<this->n;i++){
+    for(int i=0; i<this->n;i++){ //iteramos por los negocios
         int j=0;
         // Deberiamos tener en cuenta el caso que no esta en ningun deposito.
-        if(correspondencia[i]!=-1){
-            while(j<m){
-                if(j!=correspondencia[i] && this->distancias[j][i]<this->distancias[correspondencia[i]][i] && this->demandas[j][i]<this->capacidades[j]){
-                    this->valor_objetivo-=(this->distancias[correspondencia[i]][i]-this->distancias[j][i]);
-                    this->capacidades[j]-=this->demandas[j][i];
-                    // cout<<"B"<<endl;
-                    this->capacidades[correspondencia[i]]+=this->demandas[correspondencia[i]][i];
-                    // cout<<"C"<<endl;
+        while(j<m){//iteramos por los depósitos
+            if(correspondencia[i]!=-1){ //si el negocio fue asignado a algun depósito
+                if(j!=correspondencia[i] && this->distancias[j][i]<this->distancias[correspondencia[i]][i] && this->demandas[j][i]<this->capacidades[j]){//evalúo si la distancia es menor en el nuevo depósito y si la capacidad es suficiente
+                    this->valor_objetivo-=(this->distancias[correspondencia[i]][i]-this->distancias[j][i]);//actualizamos el valor objetivo
+                    this->capacidades[j]-=this->demandas[j][i];//actualizamos las capacidades
+                    this->capacidades[correspondencia[i]]+=this->demandas[correspondencia[i]][i];//actualizamos las capacidades
                     this->asignaciones[correspondencia[i]].erase(find(asignaciones[correspondencia[i]].begin(), asignaciones[correspondencia[i]].end(), i));
-                    // cout<<"D"<<endl;
                     this->asignaciones[j].push_back(i);
-                    // cout<<"E"<<endl;
                     this->correspondencia[i]=j;
-                    //cout<<"F"<<endl;
                     break;
                 }
-                j+=1;
             }
+            else if(correspondencia[i]==-1){
+                if(capacidades[j]-demandas[j][i]>=0){
+                    //CHEQUEAR SI EL CODIGO ENTRA ACÁ !!!
+                    this->capacidades[j] -= demandas[j][i];//actualizo capacidades
+                    this->valor_objetivo += distancias[j][i]; //actualizo valor objetivo
+                    this->valor_objetivo -= 3*this->dist_max; //despenalizo
+                    this->correspondencia[i] = j; // asigno
+                    this->asignaciones[j].push_back(i);// asigno
+                }
+            }                
+            j+=1;
         }
     }
     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
@@ -184,22 +193,20 @@ void AssignmentInstance::busqueda1(){
 
 
 void AssignmentInstance::busqueda2(){
-    for(int i=0;i<this->n;i++){
-        for(int j=0;j<this->n;j++){
-            if(this->correspondencia[i]!=this->correspondencia[j]){
-                // cout<<"lara hace pis"<<endl;
-                if(condiciones_swap(i,j)){
-                    // cout<<"lara hace caca"<<endl;
-                    this->capacidades[this->correspondencia[i]] += this->demandas[this->correspondencia[i]][i];
-                    this->capacidades[this->correspondencia[i]] -= this->demandas[this->correspondencia[i]][j];
-                    this->capacidades[this->correspondencia[j]] += this->demandas[this->correspondencia[j]][j];
-                    this->capacidades[this->correspondencia[j]] -= this->demandas[this->correspondencia[j]][i];
-                    this->valor_objetivo-=(this->distancias[this->correspondencia[i]][i]+this->distancias[this->correspondencia[j]][j]- this->distancias[this->correspondencia[i]][j]-this->distancias[this->correspondencia[j]][i]);
+    for(int i=0;i<this->n;i++){ //iteramos por los negocios
+        for(int j=0;j<this->n;j++){ //iteramos por los negocios
+            if(i!=j && this->correspondencia[i]!=this->correspondencia[j] ){
+                if(condiciones_swap(i,j)){ //evaluamos si cumple las condiciones del swap
+                    this->capacidades[this->correspondencia[i]] += this->demandas[this->correspondencia[i]][i]; //actualizamos capacidades
+                    this->capacidades[this->correspondencia[i]] -= this->demandas[this->correspondencia[i]][j]; //actualizamos capacidades
+                    this->capacidades[this->correspondencia[j]] += this->demandas[this->correspondencia[j]][j]; //actualizamos capacidades
+                    this->capacidades[this->correspondencia[j]] -= this->demandas[this->correspondencia[j]][i]; //actualizamos capacidades
+                    this->valor_objetivo-=(this->distancias[this->correspondencia[i]][i]+this->distancias[this->correspondencia[j]][j]- this->distancias[this->correspondencia[i]][j]-this->distancias[this->correspondencia[j]][i]);//actualizamos el valor objetivo
                     this->asignaciones[this->correspondencia[i]].push_back(j);
                     this->asignaciones[this->correspondencia[j]].push_back(i);
                     this->asignaciones[this->correspondencia[i]].erase(find(this->asignaciones[this->correspondencia[i]].begin(),this->asignaciones[this->correspondencia[i]].end(), i));
                     this->asignaciones[this->correspondencia[j]].erase(find(this->asignaciones[this->correspondencia[j]].begin(),this->asignaciones[this->correspondencia[j]].end(), j));
-                    swap(this->correspondencia[i], this->correspondencia[j]);
+                    swap(this->correspondencia[i], this->correspondencia[j]);//realizamos el swap
                 }
             }
         }
@@ -223,10 +230,10 @@ void AssignmentInstance::crear_archivo(string nombre){
 }
 
 bool AssignmentInstance::condiciones_swap(int i, int j){
-    if(correspondencia[i]==-1 || correspondencia[j]==-1){return false;}
-    bool condicion1= (this->distancias[this->correspondencia[i]][i] + this->distancias[this->correspondencia[j]][j])> (this->distancias[this->correspondencia[i]][j] + this->distancias[this->correspondencia[j]][i]);
-    bool condicion2= this->demandas[this->correspondencia[i]][j]< this->capacidades[this->correspondencia[i]]+this->demandas[this->correspondencia[i]][i];
-    bool condicion3= this->demandas[this->correspondencia[j]][i]< this->capacidades[this->correspondencia[j]]+this->demandas[this->correspondencia[j]][j];
+    if(correspondencia[i]==-1 || correspondencia[j]==-1){return false;}//evaluamos que ambos negocios hayan sido asignados a algún depósito
+    bool condicion1= (this->distancias[this->correspondencia[i]][i] + this->distancias[this->correspondencia[j]][j])> (this->distancias[this->correspondencia[i]][j] + this->distancias[this->correspondencia[j]][i]);//evaluamos que las distancias mejoren
+    bool condicion2= this->demandas[this->correspondencia[i]][j]< this->capacidades[this->correspondencia[i]]+this->demandas[this->correspondencia[i]][i];//evaluamos que las capacidades permitan el swap
+    bool condicion3= this->demandas[this->correspondencia[j]][i]< this->capacidades[this->correspondencia[j]]+this->demandas[this->correspondencia[j]][j];//evaluamos que las capacidades permitan el swap
     return condicion1 && condicion2 && condicion3;
 }
 

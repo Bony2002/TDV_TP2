@@ -33,6 +33,7 @@ class AssignmentInstance{
     int m;
     int valor_objetivo;
     bool resuelto;
+    int dist_max;
 
 };
 
