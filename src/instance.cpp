@@ -16,10 +16,10 @@ AssignmentInstance::AssignmentInstance(string filename){
     file>>mystring;
     int n = stoi(mystring);
     for(int i = 0; i < m; i++){
-        vector<int> aux;
+        vector<double> aux;
         for(int j = 0; j < n; j++){
             file>>mystring;
-            int x = stoi(mystring);
+            double x = stod(mystring);
             aux.push_back(x);
         }
         this->distancias.push_back(aux);
@@ -48,8 +48,7 @@ AssignmentInstance::AssignmentInstance(string filename){
     this->n=distancias[0].size();
     vector<int> aux2(this->n,-1);
     this->correspondencia=aux2;
-
-    int d_max = 0;
+    double d_max = 0;
     for(int i = 0; i<n;i++){ //calculo la distancia máxima entre un negocio y un depósito
         for( int j = 0; j <m; j++){
             d_max = max(d_max, distancias[j][i]);
@@ -62,7 +61,7 @@ AssignmentInstance::AssignmentInstance(string filename){
 void AssignmentInstance::heuristica1(){
 
     for(int j = 0; j < this->distancias[0].size(); j++){ //iteramos por los negocios
-        int minimo = 99999;
+        double minimo = 99999;
         int depositoFinal = 0;
         for(int i = 0; i < this->distancias.size(); i++){ //iteramos por los depósitos
             if((this->capacidades[i]-this->demandas[i][j] >= 0) && (this->distancias[i][j] < minimo)){ //vemos si el la demanda del negocio no supera la capacidad del deposito y si este es el deposito más cercano al negocio
@@ -85,11 +84,11 @@ void AssignmentInstance::heuristica1(){
     cout<<this->valor_objetivo<<endl;
 }
 
-vector<int> AssignmentInstance::ordenamiento(vector<int> dist){
+vector<int> AssignmentInstance::ordenamiento(vector<double> dist){
     //el objetivo de esta función auxiliar es por cada depósito ordenar los negocios según cuan cerca están de este
     //dist son las distancias de los negocios a un depósito x
     //observemos que el vector ordenado no contiene las distancias si no que los índices de los negocios
-    vector<int> ordenado={dist[0]};
+    vector<int> ordenado={0};
     for(int i=1;i<this->n;i++){ // iteramos por los negocios, ordenado por distancia  al depósito, de menor a mayor
 
         for(int j=0;j<ordenado.size();j++){
@@ -237,27 +236,30 @@ bool AssignmentInstance::condiciones_swap(int i, int j){
     return condicion1 && condicion2 && condicion3;
 }
 
-void AssignmentInstance::metaheuristica(){
-    heuristica2();
+void AssignmentInstance::metaheuristica(bool i){
+    (i ? heuristica1():heuristica2());
     bool mejora=true;
-    int actual;
+    double actual;
     while(mejora){
         actual=this->valor_objetivo;
         bool relocate=true;
         while(relocate){
-            int reloc=this->valor_objetivo;
+            double reloc=this->valor_objetivo;
             busqueda1();
             cout<<"Reloc:"<<valor_objetivo<<endl;
             if(reloc==valor_objetivo){relocate=false;}
         }
         bool swape=true;
         while(swape){
-            int spe=this->valor_objetivo;
+            double spe=this->valor_objetivo;
             busqueda2();
             cout<<"Spe:"<<valor_objetivo<<endl;
+
             if(spe==valor_objetivo){swape=false;}
         }
-        if (valor_objetivo==actual){mejora=false;}
+        if (valor_objetivo==actual){
+            mejora=false;
+        }
     }
 
 }

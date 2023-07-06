@@ -1,171 +1,61 @@
 #include "instance.h"
 using namespace std;
 
+void generadorCSV(string filename, vector<string> directorio){
+        
+        std::fstream fout;
+        fout.open(filename, ios::out);
+        fout<<"Dataset,Valor Objetivo Heruistica 1,Valor Objetivo Heuristica 2,Valor Objetivo Heuristica 1 + Busqueda Local 1,Valor Objetivo Heuristica 1 + Busqueda Local 2,Valor Objetivo Heuristica 2 + Busqueda Local 1,Valor Objetivo Heuristica 2 + Busqueda Local 2,Metaheuristica1,Metaheuristica2\n";
+        for(string i : directorio){
+            AssignmentInstance Instance1(i);
+            Instance1.heuristica1();
+            double heur1 = Instance1.valor_objetivo;
+            Instance1.busqueda1();
+            double heur1busq1 = Instance1.valor_objetivo; 
+            
+            AssignmentInstance Instance2(i);
+            Instance2.heuristica1();
+            Instance2.busqueda2();
+            double heur1busq2 = Instance2.valor_objetivo; 
+
+            AssignmentInstance Instance3(i);
+            Instance3.heuristica2();
+            double heur2 = Instance3.valor_objetivo;
+            Instance3.busqueda1();
+            double heur2busq1 = Instance3.valor_objetivo; 
+
+            AssignmentInstance Instance4(i);
+            Instance4.heuristica2();
+            Instance4.busqueda2();
+            double heur2busq2 = Instance4.valor_objetivo; 
+
+            AssignmentInstance Instance5(i);
+            Instance5.metaheuristica(true);
+            double meta1 = Instance5.valor_objetivo;
 
 
-// void lector(string filename, vector<vector<int>> &dist, vector<vector<int>> &demandas, vector<int> &capacidades){
-//     // Guardamos las distancias de los negocios a los depositos en una matriz
-//     ifstream file(filename);
-//     string mystring;
-//     file>>mystring;
-//     int m = stoi(mystring);
-//     file>>mystring;
-//     int n = stoi(mystring);
-//     for(int i = 0; i < m; i++){
-//         vector<int> aux;
-//         for(int j = 0; j < n; j++){
-//             file>>mystring;
-//             int x = stoi(mystring);
-//             aux.push_back(x);
-//         }
-//         dist.push_back(aux);
-//     }
+            AssignmentInstance Instance6(i);
+            Instance6.metaheuristica(false);
+            double meta2 = Instance6.valor_objetivo;
 
-//     //Guardamos las demandas de los negocios en una matriz
-//     for(int i = 0; i < m; i++){
-//         vector<int> aux;
-//         for(int j = 0; j <n; j++){
-//             file>>mystring;
-//             int y = stoi(mystring);
-//             aux.push_back(y);
-//         }
-//         demandas.push_back(aux);
-//     }
-
-//     //Guardamos las capacidades totales de los depositos
-//     for(int i = 0; i < m; i++){
-//         file>>mystring;
-//         int z = stoi(mystring);
-//         capacidades.push_back(z);
-//     }
-
-//     //imprimimos la información
-//     cout<<"Distancias"<<endl;
-//     for(vector<int> v : dist){
-//         for(int i : v){
-//             cout <<i<<" ";
-//         }
-//         cout << endl;
-//         cout<<"-----------------"<<endl; 
-//     }
-//     cout<<"Demandas"<<endl;
-//     for(vector<int> v : demandas){
-//         for(int i : v){
-//             cout <<i<<" ";
-//         }
-//         cout << endl; 
-//         cout<<"-----------------"<<endl; 
-//     }
-//     cout<<"Capacidades"<<endl;
-//     for(int i : capacidades){
-//         cout << i << " "; 
-//     }
-//     cout << endl; 
-//     cout<<"-----------------"<<endl; 
-    
-// }
-
-// void heuristica_1(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
-//     //Le asignamos a un negocio el deposito que le quede mas cerca
-//     // HAY QUE HACER: Ordenar a los negocios de menor a mayor por la distancia que tengan con su deposito mas cercano
-//     vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
-//     for(int j = 0; j < dist[0].size(); j++){
-//         int minimo = 99999;
-//         int depositoFinal = 0;
-//         for(int i = 0; i < dist.size(); i++){
-//             if((capacidades[i]-demandas[i][j] >= 0) && (dist[i][j] < minimo)){
-//                 minimo = dist[i][j];
-//                 depositoFinal = i;
-//             }
-//         }
-//         asig[depositoFinal].push_back(j);
-//         capacidades[depositoFinal] -= demandas[depositoFinal][j];
-//     } 
-
-//     ofstream asignaciones("asignaciones_heuristica1.txt", std::ofstream::out);
-//     for(int i = 0; i < asig.size(); i++){
-//         for(int j = 0; j < asig[i].size(); j++){
-//             string w = to_string(asig[i][j]);
-//             asignaciones << w << " ";
-//         }
-//         asignaciones<<'\n';
-//     }
-//     asignaciones.close();
-//     return;
-// }
-
-// void heuristica_2(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
-//     //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
-//     vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
-//     vector<int>no_disponibles={};
-//     for(int j = 0; j < dist.size(); j++){
-//         int suma = 0;
-//         //calculas la distancia promedio de cada deposito
-//         for(int i = 0; i<dist[0].size(); i++){
-//             suma += dist[j][i];
-//         }
-//         int prom = suma/dist[0].size();
-//         for(int i = 0; i < dist[0].size(); i++){
-//             if((capacidades[j]-demandas[j][i] >= 0) && (dist[j][i] <= prom) && find(no_disponibles.begin(), no_disponibles.end(), i)==no_disponibles.end()){ //agregas el nogocio al deposito si esta mas cerca que el promedio
-//                 asig[j].push_back(i);
-//                 capacidades[j] -= demandas[j][i];
-//                 no_disponibles.push_back(i);
-//             }
-//         }
-//     }
-
-//     ofstream asignaciones("asignaciones_heuristica2.txt", std::ofstream::out);
-//     for(int i = 0; i < asig.size(); i++){
-//         for(int j = 0; j < asig[i].size(); j++){
-//             string w = to_string(asig[i][j]);
-//             asignaciones << w << " ";
-//         }
-//         asignaciones<<'\n';
-//     }
-//     asignaciones.close();
-//     return;
-// }
-
-// void heuristica_3(vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidades){
-//     //Le asignamos a un negocio el deposito que le quede mas cerca
-//     vector<vector<int>> asig(dist.size(), vector<int>(0, {}));
-//     //La idea de este algoritmo es ordenar los negocios de mayor a menor por el promedio de la diferencia entre
-//     // un deposito i y i-1, siendo el deposito 0 el deposito mas cerca y m el deposito mas lejos.
-
-//     for(int j = 0; j < dist[0].size(); j++){
-//         int minimo = 99999;
-//         int depositoFinal = 0;
-//         for(int i = 0; i < dist.size(); i++){
-//             if((capacidades[i]-demandas[i][j] >= 0) && (dist[i][j] < minimo)){
-//                 minimo = dist[i][j];
-//                 depositoFinal = i;
-//             }
-//         }
-//         asig[depositoFinal].push_back(j);
-//         capacidades[depositoFinal] -= demandas[depositoFinal][j];
-//     } 
-
-//     ofstream asignaciones("asignaciones_heuristica3.txt", std::ofstream::out);
-//     for(int i = 0; i < asig.size(); i++){
-//         for(int j = 0; j < asig[i].size(); j++){
-//             string w = to_string(asig[i][j]);
-//             asignaciones << w << " ";
-//         }
-//         asignaciones<<'\n';
-//     }
-//     asignaciones.close();
-//     return;
-// }
-
-// void busqueda_local_1(int obj,vector<vector<int>> asig , vector<vector<int>> dist, vector<vector<int>> demandas, vector<int> capacidad){
-
-
-// }
+            fout << i <<","<< heur1 <<","<< heur2 <<","<< heur1busq1 <<","<< heur1busq2 <<","<< heur2busq1 <<","<< heur2busq2 <<","<< meta1 <<","<<meta2<<"\n";
+        }
+        fout.close();
+    }
 
 
 int main(int argc, char** argv) {
-    std::string filename = "instances/gap/gap_a/a05200";
+    std::string filename = "instances/gap/gap_a/a05100";
     std::cout << "Reading file " << filename << std::endl;
+    std::vector<string> directorioA ={"instances/gap/gap_a/a05100","instances/gap/gap_a/a05200","instances/gap/gap_a/a10100","instances/gap/gap_a/a10100","instances/gap/gap_a/a20100","instances/gap/gap_a/a20200"};
+    std::string archivoA="ExperimentacionGapA";
+    std::vector<string> directorioB ={"instances/gap/gap_b/b05100","instances/gap/gap_b/b05200","instances/gap/gap_b/b10100","instances/gap/gap_b/b10100","instances/gap/gap_b/b20100","instances/gap/gap_b/b20200"};
+    std::string archivoB="ExperimentacionGapB";
+    
+
+    // AssignmentInstance Instance (filename);
+    // Instance.metaheuristica();
+    // cout<<Instance.valor_objetivo<<endl;
 
     // vector<vector<int>> dist, demandas;
     // vector<int> capacidades;
@@ -182,7 +72,21 @@ int main(int argc, char** argv) {
     // instance2.heuristica2();
     // instance2.busqueda1();
 
-    AssignmentInstance Instance3 (filename);
-    Instance3.metaheuristica();
+    std::string realfile = "instances/real/real_instance";
+    std::cout << "Reading file " << realfile << std::endl;
+
+    AssignmentInstance Instance3 (realfile);
+    Instance3.metaheuristica(true);
+    cout<<Instance3.valor_objetivo<<endl;
+
+    AssignmentInstance Instance4 (realfile);
+    Instance4.metaheuristica(false);
+    cout<<Instance4.valor_objetivo<<endl;
+    // generadorCSV(archivoA,directorioA);
+
+
+    
     return 0;
+
 }
+

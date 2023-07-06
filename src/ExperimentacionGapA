@@ -1,0 +1,7 @@
+Dataset,Valor Objetivo Heruistica 1,Valor Objetivo Heuristica 2,Valor Objetivo Heuristica 1 + Busqueda Local 1,Valor Objetivo Heuristica 1 + Busqueda Local 2,Valor Objetivo Heuristica 2 + Busqueda Local 1,Valor Objetivo Heuristica 2 + Busqueda Local 2,Metaheuristica1,Metaheuristica2
+instances/gap/gap_a/a05100,1709,1951,1709,1700,1750,1789,1700,1701
+instances/gap/gap_a/a05200,3259,3838,3259,3238,3384,3318,3238,3238
+instances/gap/gap_a/a10100,1390,1727,1390,1364,1478,1483,1364,1379
+instances/gap/gap_a/a10100,1390,1727,1390,1364,1478,1483,1364,1379
+instances/gap/gap_a/a20100,1170,1589,1170,1168,1345,1354,1167,1161
+instances/gap/gap_a/a20200,2371,2930,2371,2352,2597,2588,2351,2353
