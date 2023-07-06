@@ -44,6 +44,8 @@ Se pueden diseñar heurísticas que tomen un enfoque reacionado a las demandas q
 
 ### Operadores de búsqueda local
 
+#### ¿Cómo representamos una solución?
+
 #### Operador 1: relocate
 
 El primer operador que definimos es un relocate. Este itera por los negocios evaluando si hay algún depósito con menor distancia al negocio que aquel al cual se encuentra asignado actualmente, y en caso afirmativo, si las capacidades lo permiten, asigna el negocio a su nuevo depósito. Definimos como vecindario a todas las soluciones alcanzables desde mi solución actual haciendo un único relocate. Utilizamos como criterio de aceptación el *first improvement*, y por lo tanto apenas hallamos una solución mejor a la actual redifinimos nuestra solución como la nueva y continuamos explorando su nuevo vecindario.
@@ -71,3 +73,9 @@ Para aceptar una nueva solución debemos evaluar 2 condiciones, con $i_1$ el dep
 -   $d_{i_2j_1} \leq \bar{c}_{i_2}+d_{i_2j_2}$
 
 Con $\bar{c}_k$ la capacidad restante del depósito $k$.
+
+Pareciera que este operador funcionará con ambas heurísticas diseñadas ya que siempre puede suceder que las suma de las nuevas distancias sea menor que la suma de las anteriores.
+
+¿Qué podría hacer a una solución infactible? En primer lugar que la suma de las demandas de los negocios asignados a cierto depósito superen su capacidad. En segundo lugar, que un negocio sea asignado a más de un depósito. Ambos operadores evalúan que las capacidades de los depósitos no sean excedidos. Asimismo, no permiten que un negocio peretenezca a dos depósitos: el operador relocate quita al negocio del depósito anterior al relocalizarlo y el operador swap quita a ambos negocios de sus anteriores depósitos. Luego, ambos son correctos.
+
+### Metaheurística
