@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     std::string archivoB="ExperimentacionGapB";
     std::vector<string> directorioE ={"instances/gap/gap_e/e05100","instances/gap/gap_e/e05200","instances/gap/gap_e/e10100","instances/gap/gap_e/e10200","instances/gap/gap_e/e10400","instances/gap/gap_e/e15900","instances/gap/gap_e/e20100","instances/gap/gap_e/e20200","instances/gap/gap_e/e20400","instances/gap/gap_e/e30900","instances/gap/gap_e/e40400","instances/gap/gap_e/e60900","instances/gap/gap_e/e201600","instances/gap/gap_e/e401600","instances/gap/gap_e/e801600"};
     std::string archivoE="ExperimentacionGapE";
-    std::vector<string> directorioReal ={"instancias/real/real_instance"};
+    std::vector<string> directorioReal ={"instances/real/real_instance"};
     std::string archivoReal="ExperimentacionReal";
     
     
