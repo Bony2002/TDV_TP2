@@ -61,7 +61,7 @@ AssignmentInstance::AssignmentInstance(string filename){
 
 
 void AssignmentInstance::heuristica1(){
-
+    auto begin = std::chrono::high_resolution_clock::now();
     for(int j = 0; j < this->distancias[0].size(); j++){ //iteramos por los negocios
         double minimo = 99999;
         int depositoFinal = 0;
@@ -84,6 +84,10 @@ void AssignmentInstance::heuristica1(){
     }      
     crear_archivo("asignaciones_heuristicas_1_clase.txt");//generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin);
+    this->tiempo[0] = elapsed.count();
+
 }
 
 vector<int> AssignmentInstance::ordenamiento(vector<double> dist){
@@ -110,6 +114,7 @@ vector<int> AssignmentInstance::ordenamiento(vector<double> dist){
 
 void AssignmentInstance::heuristica2(){
     //Le asignamos a  el cada deposito loo negocios que le queden mas cerca
+    auto begin = std::chrono::high_resolution_clock::now();
     vector<int>dist_a_dep = {};
     vector<int>no_disponibles={};
     for(int i = 0; i<m; i++){//iteramos por los depositos
@@ -131,6 +136,9 @@ void AssignmentInstance::heuristica2(){
     }      
     crear_archivo("asignaciones_heuristicas_2_clase.txt"); //generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin);
+    this->tiempo[1] = elapsed.count();
 }
 
 // void AssignmentInstance::busqueda1(){
@@ -160,6 +168,7 @@ void AssignmentInstance::heuristica2(){
 
 void AssignmentInstance::busqueda1(){
     // cout<<correspondencia.size()<<endl;
+    auto begin = std::chrono::high_resolution_clock::now();
     for(int i=0; i<this->n;i++){ //iteramos por los negocios
         int j=0;
         // Deberiamos tener en cuenta el caso que no esta en ningun deposito.
@@ -190,10 +199,14 @@ void AssignmentInstance::busqueda1(){
     }
     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
     cout<<this->valor_objetivo<<endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin);
+    this->tiempo[2] = elapsed.count();
 }
 
 
 void AssignmentInstance::busqueda2(){
+    auto begin = std::chrono::high_resolution_clock::now();
     for(int i=0;i<this->n;i++){ //iteramos por los negocios
         for(int j=0;j<this->n;j++){ //iteramos por los negocios
             if(i!=j && this->correspondencia[i]!=this->correspondencia[j] ){
@@ -214,6 +227,9 @@ void AssignmentInstance::busqueda2(){
     }
     cout<<this->valor_objetivo<<endl;
     crear_archivo("asignaciones_heuristicas_1_busqueda_local.txt");
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin);
+    this->tiempo[3] = elapsed.count();
 }
 
 
@@ -239,6 +255,7 @@ bool AssignmentInstance::condiciones_swap(int i, int j){
 }
 
 void AssignmentInstance::metaheuristica(bool i){
+    auto begin = std::chrono::high_resolution_clock::now();
     (i ? heuristica1():heuristica2());
     bool mejora=true;
     double actual;
@@ -263,6 +280,8 @@ void AssignmentInstance::metaheuristica(bool i){
             mejora=false;
         }
     }
-
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin);
+    this->tiempo[4] = elapsed.count();
 }
 

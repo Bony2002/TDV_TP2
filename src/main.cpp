@@ -47,7 +47,7 @@ void generadorCSV(string filename, vector<string> directorio){
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
     std::cout << "Reading file " << filename << std::endl;
-    std::vector<string> directorioA ={"instances/gap/gap_a/a05100","instances/gap/gap_a/a05200","instances/gap/gap_a/a10100","instances/gap/gap_a/a10100","instances/gap/gap_a/a20100","instances/gap/gap_a/a20200"};
+    std::vector<string> directorioA ={"instances/gap/gap_a/a05100","instances/gap/gap_a/a05200","instances/gap/gap_a/a10100","instances/gap/gap_a/a10200","instances/gap/gap_a/a20100","instances/gap/gap_a/a20200"};
     std::string archivoA="ExperimentacionGapA";
     std::vector<string> directorioB ={"instances/gap/gap_b/b05100","instances/gap/gap_b/b05200","instances/gap/gap_b/b10100","instances/gap/gap_b/b10200","instances/gap/gap_b/b20100","instances/gap/gap_b/b20200"};
     std::string archivoB="ExperimentacionGapB";
