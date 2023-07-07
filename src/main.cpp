@@ -57,18 +57,6 @@ void generadorCSV(string filename, vector<string> directorio, bool realInstance)
         double th2tb1 = th2+th2b1;
         double th2tb2 = th2+th2b2;
 
-        //estoy chqueando algo
-        cout<<i<<endl;
-        int contador =0;
-        for(int x: Instance6.correspondencia){
-            if(x == -1){
-                
-                contador++;
-            }
-        }
-        cout<<"contador:"<<contador<<endl;
-        /////
-
         if(realInstance){
             archivo << i <<","<< heur1 <<","
             << th1 <<","<< heur2 <<","<< th2 <<","<< heur1busq1 <<","<< th1tb1  <<","<<
@@ -94,44 +82,11 @@ int main(int argc, char** argv) {
     std::string archivoE="ExperimentacionGapE";
     std::vector<string> directorioReal ={"instances/real/real_instance"};
     std::string archivoReal="ExperimentacionReal";
-    
-    
 
-    // AssignmentInstance Instance (filename);
-    // Instance.metaheuristica();
-    // cout<<Instance.valor_objetivo<<endl;
-
-    // vector<vector<int>> dist, demandas;
-    // vector<int> capacidades;
-    // lector(filename, dist, demandas, capacidades);
-
-    // heuristica_1(dist, demandas, capacidades);
-    // heuristica_2(dist, demandas, capacidades);
-
-    // AssignmentInstance instance (filename);
-    // instance.heuristica1();
-    // instance.busqueda2();
-
-    // AssignmentInstance instance2 (filename);
-    // instance2.heuristica2();
-    // instance2.busqueda1();
-
-    std::string realfile = "instances/real/real_instance";
-    std::cout << "Reading file " << realfile << std::endl;
-
-    // AssignmentInstance Instance3 (realfile);
-    // Instance3.heuristica2();
-   
-
-    // AssignmentInstance Instance4 (realfile);
-    // Instance4.metaheuristica(false);
-    // cout<<Instance4.valor_objetivo<<endl;
     generadorCSV(archivoA,directorioA, false);
     generadorCSV(archivoB,directorioB, false);
     generadorCSV(archivoE,directorioE, false);
     generadorCSV(archivoReal, directorioReal, true);
-    
-
     return 0;
 
 }
