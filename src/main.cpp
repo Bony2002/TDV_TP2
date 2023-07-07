@@ -56,7 +56,23 @@ void generadorCSV(string filename, vector<string> directorio, bool realInstance)
         double th1tb2 = th1+th1b2;
         double th2tb1 = th2+th2b1;
         double th2tb2 = th2+th2b2;
-        
+
+        //estoy chqueando algo
+        double count = 0.0;
+        cout<<filename<<" "<<i<<endl;
+        for (vector<double> x : Instance6.distancias){
+            for (double y : x){
+                count+=y;
+            }
+        }
+        cout<<"dist sumadas "<<count<<endl;
+        for(int x: Instance6.correspondencia){
+            if(x == -1){
+                cout<<x<<endl;
+            }
+        }
+        /////
+
         if(realInstance){
             archivo << i <<","<< heur1 <<","
             << th1 <<","<< heur2 <<","<< th2 <<","<< heur1busq1 <<","<< th1tb1  <<","<<
