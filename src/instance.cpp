@@ -6,7 +6,6 @@ AssignmentInstance::AssignmentInstance(string filename){
     this->capacidades={};
     this->demandas={};
     this->valor_objetivo=0;
-    this->resuelto=0;
     this->correspondencia={};
     this->tiempo={0,0,0,0,0};
 
