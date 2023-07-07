@@ -60,6 +60,8 @@ Este operador no aportará una mejora con toda heurística posible como base par
 
 El operador relocate nos permite asignar los negocios que no era posible asignar a ningún depósito dadas las capacidades y las asignaciones ya realizadas. Se sufría una gran penalización sobre el valor objetivo por cada negocio no asignado, por lo cual el hecho de poder incluirlos en la solución mejora considerablemente el valor objetivo. Por supuesto, no se podrán ubicar dichos negocios sin antes haberse realizados otros relocate que generen suficiente espacio en algún depósito.
 
+La complejidad del opeador relocate es de $O(nm)$ siendo $n$ la cantidad de negocios y $m$ la cantidad de depósitos. Notemos que la búsqueda corre hasta haber analizado todas las posibles combinaciones de negocios y depósitos, realizando las alteraciones de la solución simultánemante.
+
 #### Operador 2: swap
 
 El segundo operador que diseñamos es un swap. Este itera por los negocios, en busca de dos negocios que al intercambiar el depósito en el que se encuentran el valor objetivo disminuya, respetando las capacidades. Utilizamos de nuevo el criterio de *first improvement*. Este operador no servirá para añadir los negocios no asignados a la solución, ya que swapearlos simplemente añadiría un negocio para quitar otro.
@@ -76,6 +78,22 @@ Con $\bar{c}_k$ la capacidad restante del depósito $k$.
 
 Pareciera que este operador funcionará con ambas heurísticas diseñadas ya que siempre puede suceder que las suma de las nuevas distancias sea menor que la suma de las anteriores.
 
+La complejidad del operador swap es de $O(n^2)$ siendo $n$ la cantidad de negocios, ya que la búsqueda evalúa cada par de negocios posible en busca de una mejora al valor objetivo.
+
 ¿Qué podría hacer a una solución infactible? En primer lugar que la suma de las demandas de los negocios asignados a cierto depósito superen su capacidad. En segundo lugar, que un negocio sea asignado a más de un depósito. Ambos operadores evalúan que las capacidades de los depósitos no sean excedidos. Asimismo, no permiten que un negocio peretenezca a dos depósitos: el operador relocate quita al negocio del depósito anterior al relocalizarlo y el operador swap quita a ambos negocios de sus anteriores depósitos. Luego, ambos son correctos.
 
 ### Metaheurística
+
+Como metaheurística diseñamos una variación de VND (variable neighbourhood descent) utilizando ambos vecindarios, swap y operate. Tiene ciertas diferencias con el concepto de VND, ya que itera dentro de cada operador hasta alcanzar un mínimo local.
+
+Definimos a $N_1$ como el operador relocate y a $N_2$ como el operador swap. Comenzamos investigando el vecindario $N_1$, buscando una solución mejor y pasando al vecindario de dicha solución hasta llegar a un mínimo local. Luego, comenzamos a investigar con el vecindario $N_2$ del mismo modo. Cuando llegamos a un mínimo local, retornamos a analizar el vecindario $N_1$. Alteramos entre ambos vecindarios de este modo hasta que ninguno ofrece una mejora a la solución, es decir, nos encontramos en una solución que es un mínimo local para ambos. En dicho caso, retornamos la solución como el mínimo obtenido por la metaheurística.
+
+¿Cuál es la calidad de la solución? Nada nos asegura que la solución hallada por nuestra metaheurística sea efectivamente la solución óptima. Es muy probable que no lo sea. De todos modos, a partir de experimentación que explicaremos a continuación, notamos que cuánto realmente mejora la solución inicial depende en un alto grado de la calidad de la heurística llevada a cabo.
+
+Idealmente, podríamos resolver una vez el problema con un algoritmo exacto, obteniendo el óptimo, y así podríamos determinar con mayor seguridad la calidad de nuestras soluciones aproximadas. Por otro lado, la solución inicial, y en mayor escala la heurística, genera un gran impacto en la metaheurística. Puede suceder que una heurística que genera una "peor" solución inicial nos de un mayor espacio a mejoras. Puede suceder que nuestra heurística sea muy buena y por lo tanto no podamos mejorar. Las posibilidades son múltiples, y dependen de variados factores, como también la naturaleza de la instancia que evaluamos.
+
+La complejidad de la metaheurística depende de cuantas iteraciones se realicen de esta, lo cual no es posible definir de antemano. Los operadores relocate y swap que utiliza son de complejidad $O(nm)$ y $O(n^2)$ respectivamente por lo cual por supuesto la complejidad de la metaheurística es al menos de $O(max(nm, n^2))$. La complejidad depende de la cantidad de iteraciones, es decir de la cantidad de soluciones mejores hacia las cuales nos movemos, por lo cual podríamos decir que depende de cuán cerca está nuestra solución inicial de un mínimo local para ambos operadores, lo cual depende de nuevo de la heurística utilizada para obtener dicha solución inicial.
+
+### Experimentación y discusión
+
+Para evaluar el funcionamiento y calidad de nuestras heurísticas, búsquedas locales y por úlitmo metaheurística, utilizamos tres conjuntos de bases de datos.

@@ -1,66 +1,74 @@
 #include "instance.h"
 using namespace std;
 
-void generadorCSV(string filename, vector<string> directorio){
+void generadorCSV(string filename, vector<string> directorio, bool realInstance){    
+    ofstream archivo(filename, std::ofstream::out);
+    if(realInstance){
+        archivo<<"Dataset,Valor Objetivo Heurística 1, Tiempo Heurística 1, Valor Objetivo Heurística 2, Tiempo Heurística 2, Valor Objetivo Heurística 1 + Búsqueda Local 1, Tiempo Heuristica 1 + Búsqueda Local 1, Valor Objetivo Heurística 1 + Búsqueda Local 2, Tiempo Heurística 1 + Búsqueda Local 2, Valor Objetivo Heurística 2 + Búsqueda Local 1, Tiempo Heuristica 2 + Busqueda Local 1, Valor Objetivo Heurística 2 + Búsqueda Local 2, Tiempo Heurística 2 + Búsqueda Local 2, Metaheurística1, Tiempo Metaheurística1, Metaheurística2, Tiempo Metaheuristica2\n";
+    }
+    else{
+        archivo<<"Dataset,Valor Objetivo Heurística 1, Valor Objetivo Heurística 2, Valor Objetivo Heurística 1 + Búsqueda Local 1, Valor Objetivo Heurística 1 + Búsqueda Local 2, Valor Objetivo Heurística 2 + Búsqueda Local 1, Valor Objetivo Heurística 2 + Búsqueda Local 2, Metaheurística1, Metaheurística2\n";
+    }
+    for(string i : directorio){
+        AssignmentInstance Instance1(i);
+        Instance1.heuristica1();
+        double heur1 = Instance1.valor_objetivo;
+        Instance1.busqueda1();
+        double heur1busq1 = Instance1.valor_objetivo; 
         
-        std::fstream fout;
-        fout.open(filename, ios::out);
-        fout<<"Dataset,Valor Objetivo Heruistica 1, Tiempo Heuristica 1, Valor Objetivo Heuristica 2, Tiempo Heuristica 2, Valor Objetivo Heuristica 1 + Busqueda Local 1, Tiempo Heuristica 1 + Busqueda Local 1, Valor Objetivo Heuristica 1 + Busqueda Local 2, Tiempo Heuristica 1 + Busqueda Local 2, Valor Objetivo Heuristica 2 + Busqueda Local 1, Tiempo Heuristica 2 + Busqueda Local 1, Valor Objetivo Heuristica 2 + Busqueda Local 2, Tiempo Heuristica 2 + Busqueda Local 2, Metaheuristica1, Tiempo Metaheuristica1, Metaheuristica2, Tiempo Metaheuristica2\n";
-        for(string i : directorio){
-            AssignmentInstance Instance1(i);
-            Instance1.heuristica1();
-            double heur1 = Instance1.valor_objetivo;
-            Instance1.busqueda1();
-            double heur1busq1 = Instance1.valor_objetivo; 
-            
-            AssignmentInstance Instance2(i);
-            Instance2.heuristica1();
-            Instance2.busqueda2();
-            double heur1busq2 = Instance2.valor_objetivo; 
+        AssignmentInstance Instance2(i);
+        Instance2.heuristica1();
+        Instance2.busqueda2();
+        double heur1busq2 = Instance2.valor_objetivo; 
 
-            AssignmentInstance Instance3(i);
-            Instance3.heuristica2();
-            double heur2 = Instance3.valor_objetivo;
-            Instance3.busqueda1();
-            double heur2busq1 = Instance3.valor_objetivo; 
+        AssignmentInstance Instance3(i);
+        Instance3.heuristica2();
+        double heur2 = Instance3.valor_objetivo;
+        Instance3.busqueda1();
+        double heur2busq1 = Instance3.valor_objetivo; 
 
-            AssignmentInstance Instance4(i);
-            Instance4.heuristica2();
-            Instance4.busqueda2();
-            double heur2busq2 = Instance4.valor_objetivo; 
+        AssignmentInstance Instance4(i);
+        Instance4.heuristica2();
+        Instance4.busqueda2();
+        double heur2busq2 = Instance4.valor_objetivo; 
 
-            AssignmentInstance Instance5(i);
-            Instance5.metaheuristica(true);
-            double meta1 = Instance5.valor_objetivo;
+        AssignmentInstance Instance5(i);
+        Instance5.metaheuristica(true);
+        double meta1 = Instance5.valor_objetivo;
 
 
-            AssignmentInstance Instance6(i);
-            Instance6.metaheuristica(false);
-            double meta2 = Instance6.valor_objetivo;
+        AssignmentInstance Instance6(i);
+        Instance6.metaheuristica(false);
+        double meta2 = Instance6.valor_objetivo;
 
 
-            //Tiempos 
-            double t1 = Instance1.tiempo[0];
-            double t2 = Instance3.tiempo[1];
-            double tb1 = Instance2.tiempo[2];
-            double tb2 = Instance4.tiempo[3];
-            double tmeta1 = Instance5.tiempo[4];
-            double tmeta2 = Instance6.tiempo[4];
+        //Tiempos 
+        double t1 = Instance1.tiempo[0];
+        double t2 = Instance3.tiempo[1];
+        double tb1 = Instance2.tiempo[2];
+        double tb2 = Instance4.tiempo[3];
+        double tmeta1 = Instance5.tiempo[4];
+        double tmeta2 = Instance6.tiempo[4];
 
-            double t1t1 = t1+tb1;
-            double t1t2 = t1+tb2;
-            double t2t1 = t2+tb1;
-            double t2t2 = t2+tb2;
-            
-
-            fout << i <<","<< heur1 <<","
+        double t1t1 = t1+tb1;
+        double t1t2 = t1+tb2;
+        double t2t1 = t2+tb1;
+        double t2t2 = t2+tb2;
+        
+        if(realInstance){
+            archivo << i <<","<< heur1 <<","
             << t1 <<","<< heur2 <<","<< t2 <<","<< heur1busq1 <<","<< t1t1  <<","<<
             heur1busq2 <<","<< t1t2 <<","<< heur2busq1 <<","<< t2t1 <<","<< 
             heur2busq2 <<","<< t2t2 <<","<< meta1 <<","<< tmeta1 <<","<< meta2 <<","<< tmeta2 <<"\n";
         }
-        fout.close();
+        else{
+            archivo << i <<","<< heur1 <<","<< heur2 <<","<< heur1busq1<<","<<
+            heur1busq2 <<","<< heur2busq1 <<","<< 
+            heur2busq2 <<","<< meta1 <<","<< meta2<<"\n";
+        }
     }
-
+    archivo.close();
+}
 
 int main(int argc, char** argv) {
 
@@ -104,10 +112,10 @@ int main(int argc, char** argv) {
     AssignmentInstance Instance4 (realfile);
     Instance4.metaheuristica(false);
     cout<<Instance4.valor_objetivo<<endl;
-    generadorCSV(archivoA,directorioA);
-    generadorCSV(archivoB,directorioB);
-    generadorCSV(archivoE,directorioE);
-    generadorCSV(archivoReal, directorioReal);
+    generadorCSV(archivoA,directorioA, false);
+    generadorCSV(archivoB,directorioB, false);
+    generadorCSV(archivoE,directorioE, false);
+    generadorCSV(archivoReal, directorioReal, true);
 
     return 0;
 

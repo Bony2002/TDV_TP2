@@ -144,30 +144,6 @@ void AssignmentInstance::heuristica2(){
     this->tiempo[1] = elapsed.count();
 }
 
-// void AssignmentInstance::busqueda1(){
-//     for(int i=0; i<this->m;i++){
-//         int j=0;
-//         int flag;
-//         while(j<asignaciones[i].size()){
-//             flag=0;
-//             for(int d=0;d<this->m;d++){
-//                 if(d!=i && this->distancias[d][this->asignaciones[i][j]]<this->distancias[i][this->asignaciones[i][j]] && this->demandas[d][asignaciones[i][j]]<this->capacidades[d] ){
-//                     this->valor_objetivo-=(this->distancias[i][this->asignaciones[i][j]]-this->distancias[d][this->asignaciones[i][j]]);
-//                     this->asignaciones[d].push_back(this->asignaciones[i][j]);
-//                     this->capacidades[d]-=this->demandas[d][this->asignaciones[i][j]];
-//                     this->capacidades[i]+=this->demandas[i][this->asignaciones[i][j]];
-//                     this->asignaciones[i].erase(this->asignaciones[i].begin()+j);
-//                     flag=1;
-//                     break;
-//                 }
-//             }
-//             if(flag==0){j++;}
-//         }
-//     }
-//     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
-//     cout<<this->valor_objetivo<<endl;
-// }
-
 
 void AssignmentInstance::busqueda1(){
     // cout<<correspondencia.size()<<endl;
@@ -259,27 +235,26 @@ bool AssignmentInstance::condiciones_swap(int i, int j){
 
 void AssignmentInstance::metaheuristica(bool i){
     auto begin = std::chrono::high_resolution_clock::now();
-    (i ? heuristica1():heuristica2());
+    (i ? heuristica1():heuristica2());//utilizamos la heuristica indicada por parámetro
     bool mejora=true;
     double actual;
     while(mejora){
         actual=this->valor_objetivo;
         bool relocate=true;
-        while(relocate){
+        while(relocate){ //iteramos hasta llegar a un mínimo local del vecindario de relocate
             double reloc=this->valor_objetivo;
-            busqueda1();
+            busqueda1();//O(nm)
             cout<<"Reloc:"<<valor_objetivo<<endl;
-            if(reloc==valor_objetivo){relocate=false;}
+            if(reloc==valor_objetivo){relocate=false;}//una vez que el valor objetivo no mejora, sabemos que estamos en un mínimo local, pasamos al próximo operador (swap)
         }
         bool swape=true;
-        while(swape){
+        while(swape){//iteramos hasta llegar a un mínimo local del vecindario de swap
             double spe=this->valor_objetivo;
-            busqueda2();
+            busqueda2();//O(n^2)
             cout<<"Spe:"<<valor_objetivo<<endl;
-
-            if(spe==valor_objetivo){swape=false;}
+            if(spe==valor_objetivo){swape=false;}//una vez que el valor objetivo no mejora, sabemos que estamos en un mínimo local, pasamos al próximo operador (relocate)
         }
-        if (valor_objetivo==actual){
+        if (valor_objetivo==actual){//si ningun operador logró mejorar la solución, estamos en un mínimo para ambos, finaliza la búsqueda
             mejora=false;
         }
     }
