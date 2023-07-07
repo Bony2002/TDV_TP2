@@ -43,23 +43,25 @@ void generadorCSV(string filename, vector<string> directorio, bool realInstance)
 
 
         //Tiempos 
-        double t1 = Instance1.tiempo[0];
-        double t2 = Instance3.tiempo[1];
-        double tb1 = Instance2.tiempo[2];
-        double tb2 = Instance4.tiempo[3];
+        double th1 = Instance1.tiempo[0];
+        double th2 = Instance3.tiempo[1];
+        double th1b1 = Instance1.tiempo[2];
+        double th1b2 = Instance2.tiempo[3];
+        double th2b1 = Instance3.tiempo[2];
+        double th2b2 = Instance4.tiempo[3];
         double tmeta1 = Instance5.tiempo[4];
         double tmeta2 = Instance6.tiempo[4];
 
-        double t1t1 = t1+tb1;
-        double t1t2 = t1+tb2;
-        double t2t1 = t2+tb1;
-        double t2t2 = t2+tb2;
+        double th1tb1 = th1+th1b1;
+        double th1tb2 = th1+th1b2;
+        double th2tb1 = th2+th2b1;
+        double th2tb2 = th2+th2b2;
         
         if(realInstance){
             archivo << i <<","<< heur1 <<","
-            << t1 <<","<< heur2 <<","<< t2 <<","<< heur1busq1 <<","<< t1t1  <<","<<
-            heur1busq2 <<","<< t1t2 <<","<< heur2busq1 <<","<< t2t1 <<","<< 
-            heur2busq2 <<","<< t2t2 <<","<< meta1 <<","<< tmeta1 <<","<< meta2 <<","<< tmeta2 <<"\n";
+            << th1 <<","<< heur2 <<","<< th2 <<","<< heur1busq1 <<","<< th1tb1  <<","<<
+            heur1busq2 <<","<< th1tb2 <<","<< heur2busq1 <<","<< th2tb1 <<","<< 
+            heur2busq2 <<","<< th2tb2 <<","<< meta1 <<","<< tmeta1 <<","<< meta2 <<","<< tmeta2 <<"\n";
         }
         else{
             archivo << i <<","<< heur1 <<","<< heur2 <<","<< heur1busq1<<","<<

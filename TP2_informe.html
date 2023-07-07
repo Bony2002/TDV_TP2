@@ -469,6 +469,9 @@ instancia particular de <em>ThunderPack</em>.</p>
 </div>
 <div id="operadores-de-búsqueda-local" class="section level3">
 <h3>Operadores de búsqueda local</h3>
+<div id="cómo-representamos-una-solución" class="section level4">
+<h4>¿Cómo representamos una solución?</h4>
+</div>
 <div id="operador-1-relocate" class="section level4">
 <h4>Operador 1: relocate</h4>
 <p>El primer operador que definimos es un relocate. Este itera por los
@@ -507,10 +510,167 @@ poder incluirlos en la solución mejora considerablemente el valor
 objetivo. Por supuesto, no se podrán ubicar dichos negocios sin antes
 haberse realizados otros relocate que generen suficiente espacio en
 algún depósito.</p>
+<p>La complejidad del opeador relocate es de <span class="math inline">\(O(nm)\)</span> siendo <span class="math inline">\(n\)</span> la cantidad de negocios y <span class="math inline">\(m\)</span> la cantidad de depósitos. Notemos que
+la búsqueda corre hasta haber analizado todas las posibles combinaciones
+de negocios y depósitos, realizando las alteraciones de la solución
+simultánemante.</p>
 </div>
 <div id="operador-2-swap" class="section level4">
 <h4>Operador 2: swap</h4>
+<p>El segundo operador que diseñamos es un swap. Este itera por los
+negocios, en busca de dos negocios que al intercambiar el depósito en el
+que se encuentran el valor objetivo disminuya, respetando las
+capacidades. Utilizamos de nuevo el criterio de <em>first
+improvement</em>. Este operador no servirá para añadir los negocios no
+asignados a la solución, ya que swapearlos simplemente añadiría un
+negocio para quitar otro.</p>
+<p>Para aceptar una nueva solución debemos evaluar 2 condiciones, con
+<span class="math inline">\(i_1\)</span> el depósito A, <span class="math inline">\(i_2\)</span> el depósito B depósito, <span class="math inline">\(j_1\)</span> el negocio A (asignado al depósito A)
+y <span class="math inline">\(j_2\)</span> el negocio B (asignado al
+depósito B):</p>
+<ul>
+<li><p><span class="math inline">\(c_{i_1j_1} + c_{i_2j_2} &gt;
+c_{i_1j_2} + c_{i_2j_1}\)</span></p></li>
+<li><p><span class="math inline">\(d_{i_1j_2} \leq \bar{c}_{i_1} +
+d_{i_1j_1}\)</span></p></li>
+<li><p><span class="math inline">\(d_{i_2j_1} \leq
+\bar{c}_{i_2}+d_{i_2j_2}\)</span></p></li>
+</ul>
+<p>Con <span class="math inline">\(\bar{c}_k\)</span> la capacidad
+restante del depósito <span class="math inline">\(k\)</span>.</p>
+<p>Pareciera que este operador funcionará con ambas heurísticas
+diseñadas ya que siempre puede suceder que las suma de las nuevas
+distancias sea menor que la suma de las anteriores.</p>
+<p>La complejidad del operador swap es de <span class="math inline">\(O(n^2)\)</span> siendo <span class="math inline">\(n\)</span> la cantidad de negocios, ya que la
+búsqueda evalúa cada par de negocios posible en busca de una mejora al
+valor objetivo.</p>
+<p>¿Qué podría hacer a una solución infactible? En primer lugar que la
+suma de las demandas de los negocios asignados a cierto depósito superen
+su capacidad. En segundo lugar, que un negocio sea asignado a más de un
+depósito. Ambos operadores evalúan que las capacidades de los depósitos
+no sean excedidos. Asimismo, no permiten que un negocio peretenezca a
+dos depósitos: el operador relocate quita al negocio del depósito
+anterior al relocalizarlo y el operador swap quita a ambos negocios de
+sus anteriores depósitos. Luego, ambos son correctos.</p>
 </div>
+</div>
+<div id="metaheurística" class="section level3">
+<h3>Metaheurística</h3>
+<p>Como metaheurística diseñamos una variación de VND (variable
+neighbourhood descent) utilizando ambos vecindarios, swap y operate.
+Tiene ciertas diferencias con el concepto de VND, ya que itera dentro de
+cada operador hasta alcanzar un mínimo local.</p>
+<p>Definimos a <span class="math inline">\(N_1\)</span> como el operador
+relocate y a <span class="math inline">\(N_2\)</span> como el operador
+swap. Comenzamos investigando el vecindario <span class="math inline">\(N_1\)</span>, buscando una solución mejor y
+pasando al vecindario de dicha solución hasta llegar a un mínimo local.
+Luego, comenzamos a investigar con el vecindario <span class="math inline">\(N_2\)</span> del mismo modo. Cuando llegamos a un
+mínimo local, retornamos a analizar el vecindario <span class="math inline">\(N_1\)</span>. Alteramos entre ambos vecindarios de
+este modo hasta que ninguno ofrece una mejora a la solución, es decir,
+nos encontramos en una solución que es un mínimo local para ambos. En
+dicho caso, retornamos la solución como el mínimo obtenido por la
+metaheurística.</p>
+<p>¿Cuál es la calidad de la solución? Nada nos asegura que la solución
+hallada por nuestra metaheurística sea efectivamente la solución óptima.
+Es muy probable que no lo sea. De todos modos, a partir de
+experimentación que explicaremos a continuación, notamos que cuánto
+realmente mejora la solución inicial depende en un alto grado de la
+calidad de la heurística llevada a cabo.</p>
+<p>Idealmente, podríamos resolver una vez el problema con un algoritmo
+exacto, obteniendo el óptimo, y así podríamos determinar con mayor
+seguridad la calidad de nuestras soluciones aproximadas. Por otro lado,
+la solución inicial, y en mayor escala la heurística, genera un gran
+impacto en la metaheurística. Puede suceder que una heurística que
+genera una “peor” solución inicial nos de un mayor espacio a mejoras.
+Puede suceder que nuestra heurística sea muy buena y por lo tanto no
+podamos mejorar. Las posibilidades son múltiples, y dependen de variados
+factores, como también la naturaleza de la instancia que evaluamos.</p>
+<p>La complejidad de la metaheurística depende de cuantas iteraciones se
+realicen de esta, lo cual no es posible definir de antemano. Los
+operadores relocate y swap que utiliza son de complejidad <span class="math inline">\(O(nm)\)</span> y <span class="math inline">\(O(n^2)\)</span> respectivamente por lo cual por
+supuesto la complejidad de la metaheurística es al menos de <span class="math inline">\(O(max(nm, n^2))\)</span>. La complejidad depende
+de la cantidad de iteraciones, es decir de la cantidad de soluciones
+mejores hacia las cuales nos movemos, por lo cual podríamos decir que
+depende de cuán cerca está nuestra solución inicial de un mínimo local
+para ambos operadores, lo cual depende de nuevo de la heurística
+utilizada para obtener dicha solución inicial.</p>
+</div>
+<div id="experimentación-y-discusión" class="section level3">
+<h3>Experimentación y discusión</h3>
+<p>Para evaluar el funcionamiento y calidad de nuestras heurísticas,
+búsquedas locales y por úlitmo metaheurística, utilizamos tres conjuntos
+de bases de datos.</p>
+</div>
+<div id="análisis-del-caso-real" class="section level3">
+<h3>Análisis del caso real</h3>
+<p>Nuestro caso real se trata de la problemática de la empresa
+ThunderPack, la cual posee 1100 negocios, 310 depósitos y busca
+encontrar una asignación que sea lo más efectiva posible. Asimismo,
+tiene la particularidad de que la demanda de los negocios es la misma
+para cada depósito, es decir que el parámetro <span class="math inline">\(d_{ij}\)</span> no depende del depósito <span class="math inline">\(i\)</span> y por lo tanto se puede escribir como
+<span class="math inline">\(d_j\)</span>.</p>
+<p>A continuación mostramos en una tabla los valores obetivos obtenidos
+a través de distintas combinaciones de las herramientas desarrolladas en
+este proyecto:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>H1</th>
+<th>H2</th>
+<th>H1 + BL1</th>
+<th>H1 + BL2</th>
+<th>H2 + BL1</th>
+<th>H2 + BL2</th>
+<th>MH1</th>
+<th>MH2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Valor Objetivo</strong></td>
+<td>788.2</td>
+<td>1781.1</td>
+<td>788.2</td>
+<td>740.7</td>
+<td>1354.4</td>
+<td>1361.9</td>
+<td>733.6</td>
+<td>722.4</td>
+</tr>
+<tr class="even">
+<td><strong>Tiempo de ejecución</strong></td>
+<td>6.0978 ms</td>
+<td>1226.13 ms</td>
+<td></td>
+<td>100.088 ms</td>
+<td>1226.13 ms ??’???</td>
+<td>1320.12 ms</td>
+<td>748.603 ms</td>
+<td>2059.58 ms</td>
+</tr>
+</tbody>
+</table>
+<p>Referencias:</p>
+<p><strong>H1</strong> = Heurística 1 (negocio más cercano)</p>
+<p><strong>H2</strong> = Heurística 2 (depósito más cercano)</p>
+<p><strong>BL1</strong> = Búsqueda local 1 (relocate)</p>
+<p><strong>BL2</strong> = Búsqueda local 2 (swap)</p>
+<p><strong>MH1</strong> = Metaheurística con solución inicial obtenida a
+través de la heurística 1</p>
+<p><strong>MH2</strong> = Metaheurística con solución inicial obtenida a
+través de la heurística 2</p>
 </div>
 </div>
 
