@@ -87,7 +87,7 @@ void AssignmentInstance::heuristica1(){
     crear_archivo("asignaciones_heuristicas_1_clase.txt");//generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[0] = elapsed.count();
 
 }
@@ -139,7 +139,7 @@ void AssignmentInstance::heuristica2(){
     crear_archivo("asignaciones_heuristicas_2_clase.txt"); //generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[1] = elapsed.count();
 }
 
@@ -178,7 +178,7 @@ void AssignmentInstance::busqueda1(){
     crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[2] = elapsed.count();
 }
 
@@ -206,7 +206,7 @@ void AssignmentInstance::busqueda2(){
     cout<<this->valor_objetivo<<endl;
     crear_archivo("asignaciones_heuristicas_1_busqueda_local.txt");
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[3] = elapsed.count();
 }
 
@@ -258,7 +258,7 @@ void AssignmentInstance::metaheuristica(bool i){
         }
     }
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[4] = elapsed.count();
 }
 
