@@ -109,7 +109,7 @@ La complejidad de la metaheurística depende de cuantas iteraciones se realicen 
 
 Para evaluar el funcionamiento y calidad de nuestras heurísticas, búsquedas locales y por úlitmo metaheurística, utilizamos tres conjuntos de bases de datos.
 
-Podemos observar que en ningún caso varía el valor objetivo entre la heurística 1 y la heurística 1 en conjunto con el operador relocate. Esto tiene mucho sentido, ya que el operador relocate busca por cada negocio un depósito más cercano al que tiene asignado y con capacidad suficiente para satisfacer su demanda, pero dado que la heurística 1 ubica siempre a los negocios en el depósito a menor distancia con capacidad disponible, nunca habrá una mejora de este tipo para realizar.
+Podemos observar que en ningún caso varía el valor objetivo entre la heurística 1 y esta en conjunto con el operador relocate. Esto tiene sentido, ya que el operador relocate busca por cada negocio un depósito más cercano al que tiene asignado y con capacidad suficiente para satisfacer su demanda, pero dado que la heurística 1 ubica siempre a los negocios en el depósito a menor distancia con capacidad disponible, nunca habrá una mejora de este tipo para realizar.
 
 ![.](C:\Users\44482978\Desktop\uni\td5\tp2\TDV_TP2\gapA.jpg)
 
@@ -128,7 +128,7 @@ A continuación mostramos en una tabla los valores obetivos obtenidos a través 
 |          | **H1** | **H2**  | **H1+BL1** | **H1+BL2** | **H2+BL1** | **H2+BL2** | **MH1** | **MH2** |
 |--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **V.O.** | 788.2  | 1781.1  | 788.2      | 740.7      | 1354.4     | 1361.9     | 733.6   | 722.4   |
-| **T.E.** | 6.5 ms | 1193 ms | 13 ms      | 118 ms     | 1203 ms    | 1307 ms    | 824 ms  | 00      |
+| **T.E.** | 6 ms   | 1589 ms | 16 ms      | 144 ms     | 1579 ms    | 1730 ms    | 1033 ms | 2810 ms |
 
 Referencias:
 
@@ -154,8 +154,14 @@ Podemos observar que la solución de la heurística 2 tiene mucho espacio para s
 
 Una observación curiosa es que la metaheurística aplicada partiendo de una solución inicial generada con la heurística 2 obtiene un valor objetivo menor que cuando es aplicada sobre la heurística 1, a pesar de que la solución incial de esta última sea ampliamente menor. Como hemos mencionado antes, existen tanto factores en juego al utilizar estas herramientas que las posibilidades varían ampliamente y no siempre encontraremos una regla fija que establezca la superioridad de un método frente a otros.
 
-En relación al tiempo de ejecución,
+En relación al tiempo de ejecución, la primer heurística es significativamente más rápida que la segunda, y consecuentemente su combinación con ambas búsquedas locales es más rápida que la de la heurística 2. Esto tiene sentido dadas sus complejidades previamente calculadas. En relación a la metaheurística, aplicarla sobre una solución inicial proveniente de la heurística 1 tiene un tiempo de ejecución aproximadamente 3 veces menor a aplicarla partiendo de la heurística 2, pero no olvidemos que el valor objetivo de esta última es mejor que el de la anterior.
 
-Analizando las asignaciones generadas por ambas heurísticas
+Podemos concluír entonces que en el caso particular de ThunderPack, pareciera ser conveniente resolver la problemática utilizando la metaheurística sobre una solución inicial obtenida a partir de la heurística 2. El tiempo de ejecución es muy bajo, por lo cual podemos sacrificar la velocidad en pos de encontrar una mejor solución. Como fue mencionado antes, a pesar de parecer contraintuitivo dado que la heurística 2 arroja una solución precaria, la metaheurística logra realizar muchas mejoras así superando aún la solución de gran calidad generada por la primer heurística. Como vemos, todo caso es diferente y no es posible generalizar.
 
-VER CUANTOS QUEDAN SIN ASIGNAR EN CADA HEURISTICA !!!
+Analizando nuestra solución final de ambas metaheurísticas, en ningún caso quedan negocios sin asignar a un depósito, por lo cual podemos asegurar a ThunderPack que la capacidad de la red de depósitos es suficiente.
+
+La distancia total mínima que alcanzamos es de 722.4, por lo cual dado que hay 1100 negocios la distancia promedio de cada uno es de 0.65. Este valor es bajo en comparación a las otras distancias del conjunto de datos, por lo cual diríamos que es definitivamente razonable para los negocios recorrer las distancias asignadas.
+
+Es posible que según el escenario que tomemos como instancia los resultados no siempre tengan buena calidad. Asimismo, no es certero qué método arrojará una mejor solución. Luego, es importante evaluar las herramientas en cada caso particular.
+
+//MRIAR EL OUTPUT DE LAS META AAAAAAAAAAAAA

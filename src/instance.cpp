@@ -84,7 +84,7 @@ void AssignmentInstance::heuristica1(){
             this->valor_objetivo += 3*this->dist_max;
         }
     }      
-    crear_archivo("asignaciones_heuristicas_1_clase.txt");//generamos el output con las asignaciones
+    crear_archivo("asignaciones_heuristica_1.txt");//generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
@@ -136,7 +136,7 @@ void AssignmentInstance::heuristica2(){
             this->valor_objetivo += 3*this->dist_max;
         }
     }      
-    crear_archivo("asignaciones_heuristicas_2_clase.txt"); //generamos el output con las asignaciones
+    crear_archivo("asignaciones_heuristica_2.txt"); //generamos el output con las asignaciones
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
@@ -175,7 +175,7 @@ void AssignmentInstance::busqueda1(){
             j+=1;
         }
     }
-    crear_archivo("asignaciones_heuristicas_2_busqueda_local.txt");
+    crear_archivo("asignaciones_busqueda_local1.txt");
     cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
@@ -204,7 +204,7 @@ void AssignmentInstance::busqueda2(){
         }
     }
     cout<<this->valor_objetivo<<endl;
-    crear_archivo("asignaciones_heuristicas_1_busqueda_local.txt");
+    crear_archivo("asignaciones_busqueda_local2.txt");
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[3] = elapsed.count();
@@ -256,6 +256,12 @@ void AssignmentInstance::metaheuristica(bool i){
         if (valor_objetivo==actual){//si ningun operador logró mejorar la solución, estamos en un mínimo para ambos, finaliza la búsqueda
             mejora=false;
         }
+    }
+    if(i){
+        crear_archivo("asignaciones_metaheuristica_1.txt");
+    }
+    else{
+        crear_archivo("asignaciones_metaheuristica_2.txt");
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
