@@ -1,7 +1,7 @@
-Dataset,Valor Objetivo Heruistica 1, Tiempo Heuristica 1, Valor Objetivo Heuristica 2, Tiempo Heuristica 2, Valor Objetivo Heuristica 1 + Busqueda Local 1, Tiempo Heuristica 1 + Busqueda Local 1, Valor Objetivo Heuristica 1 + Busqueda Local 2, Tiempo Heuristica 1 + Busqueda Local 2, Valor Objetivo Heuristica 2 + Busqueda Local 1, Tiempo Heuristica 2 + Busqueda Local 1, Valor Objetivo Heuristica 2 + Busqueda Local 2, Tiempo Heuristica 2 + Busqueda Local 2, Metaheuristica1, Tiempo Metaheuristica1, Metaheuristica2, Tiempo Metaheuristica2
-instances/gap/gap_a/a05100,1709,111697,1951,476794,1709,111697,1700,1.03322e+06,1750,476794,1789,1.39831e+06,1700,3.6167e+06,1701,4.00981e+06
-instances/gap/gap_a/a05200,3259,162913,3838,1.50464e+06,3259,162913,3238,3.98528e+06,3384,1.50464e+06,3318,5.32701e+06,3238,1.21455e+07,3238,1.76574e+07
-instances/gap/gap_a/a10100,1390,546935,1727,1.21642e+06,1390,546935,1364,1.54408e+06,1478,1.21642e+06,1483,2.21356e+06,1364,4.77519e+06,1379,8.25498e+06
-instances/gap/gap_a/a10200,2670,264731,3271,3.28512e+06,2670,264731,2634,4.30869e+06,2820,3.28512e+06,2882,7.32907e+06,2633,1.52362e+07,2634,1.28035e+07
-instances/gap/gap_a/a20100,1170,240536,1589,1.25282e+06,1170,240536,1168,1.09063e+06,1345,1.25282e+06,1354,2.10291e+06,1167,5.86754e+06,1161,6.49755e+06
-instances/gap/gap_a/a20200,2371,218135,2930,4.96589e+06,2371,218135,2352,4.27387e+06,2597,4.96589e+06,2588,9.02162e+06,2351,1.77153e+07,2353,1.96519e+07
+Dataset,Valor Objetivo Heurística 1, Valor Objetivo Heurística 2, Valor Objetivo Heurística 1 + Búsqueda Local 1, Valor Objetivo Heurística 1 + Búsqueda Local 2, Valor Objetivo Heurística 2 + Búsqueda Local 1, Valor Objetivo Heurística 2 + Búsqueda Local 2, Metaheurística1, Metaheurística2
+instances/gap/gap_a/a05100,1709,1951,1709,1700,1750,1789,1700,1701
+instances/gap/gap_a/a05200,3259,3838,3259,3238,3384,3318,3238,3238
+instances/gap/gap_a/a10100,1390,1727,1390,1364,1478,1483,1364,1379
+instances/gap/gap_a/a10200,2670,3271,2670,2634,2820,2882,2633,2634
+instances/gap/gap_a/a20100,1170,1589,1170,1168,1345,1354,1167,1161
+instances/gap/gap_a/a20200,2371,2930,2371,2352,2597,2588,2351,2353

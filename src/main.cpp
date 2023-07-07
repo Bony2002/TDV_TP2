@@ -107,13 +107,13 @@ int main(int argc, char** argv) {
     std::string realfile = "instances/real/real_instance";
     std::cout << "Reading file " << realfile << std::endl;
 
-    AssignmentInstance Instance3 (realfile);
-    Instance3.metaheuristica(true);
-    cout<<Instance3.valor_objetivo<<endl;
+    // AssignmentInstance Instance3 (realfile);
+    // Instance3.metaheuristica(true);
+    // cout<<Instance3.valor_objetivo<<endl;
 
-    AssignmentInstance Instance4 (realfile);
-    Instance4.metaheuristica(false);
-    cout<<Instance4.valor_objetivo<<endl;
+    // AssignmentInstance Instance4 (realfile);
+    // Instance4.metaheuristica(false);
+    // cout<<Instance4.valor_objetivo<<endl;
     generadorCSV(archivoA,directorioA, false);
     generadorCSV(archivoB,directorioB, false);
     generadorCSV(archivoE,directorioE, false);
