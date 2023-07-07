@@ -58,19 +58,15 @@ void generadorCSV(string filename, vector<string> directorio, bool realInstance)
         double th2tb2 = th2+th2b2;
 
         //estoy chqueando algo
-        double count = 0.0;
-        cout<<filename<<" "<<i<<endl;
-        for (vector<double> x : Instance6.distancias){
-            for (double y : x){
-                count+=y;
-            }
-        }
-        cout<<"dist sumadas "<<count<<endl;
+        cout<<i<<endl;
+        int contador =0;
         for(int x: Instance6.correspondencia){
             if(x == -1){
-                cout<<x<<endl;
+                
+                contador++;
             }
         }
+        cout<<"contador:"<<contador<<endl;
         /////
 
         if(realInstance){
@@ -127,9 +123,9 @@ int main(int argc, char** argv) {
     // Instance3.heuristica2();
    
 
-    AssignmentInstance Instance4 (realfile);
-    Instance4.metaheuristica(false);
-    cout<<Instance4.valor_objetivo<<endl;
+    // AssignmentInstance Instance4 (realfile);
+    // Instance4.metaheuristica(false);
+    // cout<<Instance4.valor_objetivo<<endl;
     generadorCSV(archivoA,directorioA, false);
     generadorCSV(archivoB,directorioB, false);
     generadorCSV(archivoE,directorioE, false);
