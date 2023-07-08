@@ -1,8 +1,8 @@
 ---
 title: ''
 output:
-  pdf_document: default
   word_document: default
+  pdf_document: default
   html_document: default
 date: ''
 ---
@@ -111,44 +111,34 @@ Para evaluar el funcionamiento y calidad de nuestras heurísticas, búsquedas lo
 
 Podemos observar que en ningún caso varía el valor objetivo entre la heurística 1 y esta en conjunto con el operador relocate. Esto tiene sentido, ya que el operador relocate busca por cada negocio un depósito más cercano al que tiene asignado y con capacidad suficiente para satisfacer su demanda, pero dado que la heurística 1 ubica siempre a los negocios en el depósito a menor distancia con capacidad disponible, nunca habrá una mejora de este tipo para realizar.
 
-Los siguientes gráficos fueron generados con el promedio de los valores objetivo obtenidos por cada método aplicado a los diversos conjuntos de datos:
-![.](C:\Users\juani\OneDrive\Escritorio\Facultad\TD5\TDV_TP2\gapA.jpg)
-Este primer gráfico muestra como mejora el valor objetivo (la sumatoria de las distancias entre los negocios y el depósito al que fueron asignados) promedio para los distintos datasets del conjunto $gap_a$. Observamos que el valor de la solución aplicando la heurística 2 (la nombramos $s_{h2}$) es significativamente más alto que el de la heurística 1 (la nombramos $s_{h1}$) si las aplicamos por sí solas.  
+Los siguientes gráficos fueron generados con el promedio de los valores objetivo obtenidos por cada método aplicado a los diversos conjuntos de datos: ![.](C:%5CUsers%5C44482978%5CDesktop%5Cuni%5Ctd5%5Ctp2%5CTDV_TP2%5CgapA.jpg) Este primer gráfico muestra como mejora el valor objetivo (la sumatoria de las distancias entre los negocios y el depósito al que fueron asignados) promedio para los distintos datasets del conjunto $gap_a$. Observamos que el valor de la solución aplicando la heurística 2 (la nombramos $s_{h2}$) es significativamente más alto que el de la heurística 1 (la nombramos $s_{h1}$) si las aplicamos por sí solas.
 
-Al realizar la busqueda local 1, si partimos de $s_{h2}$ obtenemos una solución mucho menor (en promedio) mientras que si partimos de $s_{h1}$ no vemos una mejora.   
-Esto se debe a que la heurística 2 se basa en  asignar negocios a depositos, los cuales cuentan con una considerable capacidad y esto resulta en que un primer deposito puede recibir a varios negocios que en realidad estaban más cerca de otro depósito que examinaremos posteriormente, y a este le van a quedar disponibles negocios que tal vez se encuentran mucho mas lejos, por lo que el valor objetivo se ve incrementado de sobremanera. Esto se solucionará con el operador _relocate_ de la busqueda local 1 que reasigna negocios a otros depositos que tal vez fueron asignados golosamente al primer deposito que se examinó.
-La heuristica 1 en cambio asigna depósitos a negocios, por lo que utilizar el operador _relocate_ no debería a prior resultar en una solucion mejor dado que en general todos los negocios que tienen que caber efectivamente caben dada la capacidad mayor de los depositos inherente del conjunto $gap_a$.
-  
-En el caso de la busqueda local 1, aquí estamos utilizando el operador _swap_ el cual podría encontrar una solución mejor intercambiando negocios entre depositos y realizando diferentes asignaciones una vez obtenida la foto completa de la instancia final.  
+Al realizar la busqueda local 1, si partimos de $s_{h2}$ obtenemos una solución mucho menor (en promedio) mientras que si partimos de $s_{h1}$ no vemos una mejora.\
+Esto se debe a que la heurística 2 se basa en asignar negocios a depositos, los cuales cuentan con una considerable capacidad y esto resulta en que un primer deposito puede recibir a varios negocios que en realidad estaban más cerca de otro depósito que examinaremos posteriormente, y a este le van a quedar disponibles negocios que tal vez se encuentran mucho mas lejos, por lo que el valor objetivo se ve incrementado de sobremanera. Esto se solucionará con el operador *relocate* de la busqueda local 1 que reasigna negocios a otros depositos que tal vez fueron asignados golosamente al primer deposito que se examinó. La heuristica 1 en cambio asigna depósitos a negocios, por lo que utilizar el operador *relocate* no debería a prior resultar en una solucion mejor dado que en general todos los negocios que tienen que caber efectivamente caben dada la capacidad mayor de los depositos inherente del conjunto $gap_a$.
+
+En el caso de la busqueda local 1, aquí estamos utilizando el operador *swap* el cual podría encontrar una solución mejor intercambiando negocios entre depositos y realizando diferentes asignaciones una vez obtenida la foto completa de la instancia final.\
 Básicamente queremos remediar la visión tan a corto plazo que tiene una heurística.
-  
+
 La metaheurística resulta naturalmente en la mejor solución que podremos obtener dado que combina todas las herramientas a nuestra disposición: podemos partir ya sea desde $s_{h1}$ como desde $s_{h2}$ y obtener una solución considerablemente superior dado que realizaremos la búsqueda 1 y 2 en sincronía, siempre mejorando siquiera levemente la solución.
- 
-![.](C:\Users\juani\OneDrive\Escritorio\Facultad\TD5\TDV_TP2\gapB.jpg)
-Este segundo gráfico nos muestra dos progresiones similares entre $s_{h1}$ y $s_{h2}$ en el caso de los conjuntos de datos en $gap_b$. Ambas soluciones se ven afectadas de manera similar al aplicarles las diversas búsquedas y al realizar la metaheurística.  
 
-Estos $gap_b$, a diferencia de $gap_a$ nos presenta depósitos con mucha menos capacidad, por lo que no nos resulta extraño observar una inversión en desempeño por parte de las heurísticas ni un incremento en el valor objetivo medio, dado que esperamos terminar con muchos más negocios sin asignar, lo que inflará el valor de nuestra solución.
-La capacidad de los depositos con la heurística 1 se agotará significativamente más rápido que con la 2 puesto que los primeros negocios se asignan golosamente a sus depósitos más cercanos, sin importar los que vienen detrás, lo que resulta en _a)_ asignaciones más groseras y _b)_ muchos negocios sin asignar.   
+![.](C:%5CUsers%5C44482978%5CDesktop%5Cuni%5Ctd5%5Ctp2%5CTDV_TP2%5CgapB.jpg) Este segundo gráfico nos muestra dos progresiones similares entre $s_{h1}$ y $s_{h2}$ en el caso de los conjuntos de datos en $gap_b$. Ambas soluciones se ven afectadas de manera similar al aplicarles las diversas búsquedas y al realizar la metaheurística.
 
-En el caso de la heurística 2, las distancias se "cuidan" solas puesto que el depósito determina qué negocio recibe, por lo que si bien se agotan más rápido lo hacen más eficientemente.  
+Estos $gap_b$, a diferencia de $gap_a$ nos presenta depósitos con mucha menos capacidad, por lo que no nos resulta extraño observar una inversión en desempeño por parte de las heurísticas ni un incremento en el valor objetivo medio, dado que esperamos terminar con muchos más negocios sin asignar, lo que inflará el valor de nuestra solución. La capacidad de los depositos con la heurística 1 se agotará significativamente más rápido que con la 2 puesto que los primeros negocios se asignan golosamente a sus depósitos más cercanos, sin importar los que vienen detrás, lo que resulta en *a)* asignaciones más groseras y *b)* muchos negocios sin asignar.
 
-La busqueda 1 resulta inefectiva puesto que no contamos con tanto espacio en los depósitos de osbra como pata realizar muchos _relocate_.  
-La búsqueda 2 en cambio, la cual realiza el operador _swap_, podremos asignar mucho más eficientemente los negocios que tenemos ya asignados. También sufre bastante de la poca capacidad de los depósitos.
+En el caso de la heurística 2, las distancias se "cuidan" solas puesto que el depósito determina qué negocio recibe, por lo que si bien se agotan más rápido lo hacen más eficientemente.
+
+La busqueda 1 resulta inefectiva puesto que no contamos con tanto espacio en los depósitos de osbra como pata realizar muchos *relocate*.\
+La búsqueda 2 en cambio, la cual realiza el operador *swap*, podremos asignar mucho más eficientemente los negocios que tenemos ya asignados. También sufre bastante de la poca capacidad de los depósitos.
 
 La metaheurística, como de constumbre, nos proporciona un valor objetivo medio mucho menor dada la utilización sincrónica de las busquedas (como en $gap_a$)
-  
 
+![.](C:%5CUsers%5C44482978%5CDesktop%5Cuni%5Ctd5%5Ctp2%5CTDV_TP2%5CgapE.jpg) En este último gráfico vemos como todos los métodos son completamente inefectivos al buscar reducir $sH2$. La media de los valores objetivo obtenidos sin importar el método se mantiene constante. Esto se debe a que el conjunto de datos $gap_e$ nos presenta depósitos con capacidades distintas, por lo que ahora importará mucho más cual es el primer depósito que examinamos.
 
+En este escenario notamos facilmente el método ganador, la heurística 1: si bien se asignan golosamente depósitos a negocios de cierta manera su diversa capacidad resulta en una asignación más equitativa, tal vez otorgandole prioridad a los primeros negocios, quienes podrían llenar los negocios con poca capacidad primero y dejar los que tienen más capacidad a los posteriores o viceversa.
 
+Las busquedas locales no proporcionan mejoras significativas para $s_{h1}$ dado que los depositos tienen capacidades distintas por lo que es más dificil toparse con espacio libre para realizar cambios, si bien la busqueda 2 mejora la solución si bien levemente.
 
-![.](C:\Users\juani\OneDrive\Escritorio\Facultad\TD5\TDV_TP2\gapE.jpg)
-En este último gráfico vemos como todos los métodos son completamente inefectivos al buscar reducir $sH2$. La media de los valores objetivo obtenidos sin importar el método se mantiene constante. Esto se debe a que el conjunto de datos $gap_e$ nos presenta depósitos con capacidades distintas, por lo que ahora importará mucho más cual es el primer depósito que examinamos. 
-  
-En este escenario notamos facilmente el método ganador, la heurística 1: si bien se asignan golosamente depósitos a negocios de cierta manera su diversa capacidad resulta en una asignación más equitativa, tal vez otorgandole prioridad a los primeros negocios, quienes podrían llenar los negocios con poca capacidad primero y dejar los que tienen más capacidad a los posteriores o viceversa. 
-
-Las busquedas locales no proporcionan mejoras significativas para $s_{h1}$ dado que los depositos tienen capacidades distintas por lo que es más dificil toparse con espacio libre para realizar cambios, si bien la busqueda 2 mejora la solución si bien levemente. 
-
-La metaheurística claramente resulta en una solución mejor dado que podremos realizar _relocate_ y _swap_, tomando a los que quedaron sin asignar y optimamente asignandolos, reduciendo asi nuestro excedente por no asignación.
+La metaheurística claramente resulta en una solución mejor dado que podremos realizar *relocate* y *swap*, tomando a los que quedaron sin asignar y optimamente asignandolos, reduciendo asi nuestro excedente por no asignación.
 
 <p> </p>
 
@@ -197,8 +187,6 @@ La distancia total mínima que alcanzamos es de 722.4, por lo cual dado que hay 
 
 Es posible que según el escenario que tomemos como instancia los resultados no siempre tengan buena calidad. Asimismo, no es certero qué método arrojará una mejor solución. Luego, es importante evaluar las herramientas en cada caso particular.
 
-//MRIAR EL OUTPUT DE LAS META AAAAAAAAAAAAA
-
 ### Instrucciones de compilación y ejecución
 
 Para realizar este trabajo determinamos que lo más adecuado sería establecer una clase con todos los atributos que nos serían útiles durante la realización de este proyecto. En el archivo `instance.h` se encuentra la definición de esta como `AssignmentInstance`, que utilizaremos para inicializar una instancia dado un conjunto de datos. Los atributos y funciones de la clase `AssignmentInstance` son:
@@ -232,21 +220,49 @@ Para realizar este trabajo determinamos que lo más adecuado sería establecer u
 -   `double dist_max`: la mayor distancia de un negocio a un depósito que existe en el conjunto de datos. Este valor es pertinente dado que lo usaremos para penalizar a los métodos que dejen negocios sin asignar.
 
 ##### Métodos
--   `AssignmentInstance(std::string filename)`: método constructor. 
-  -   recorremos la sección del dataset que corresponde a las distancias y las almacenamos en `distancias`
-  -   recorremos la sección del dataset que corresponde a las demandas y las almacenamos en `demandas`
-  -   recorremos la sección del dataset que corresponde a las capacidades y las almacenamos en `capacidades`
-  -   recorremos `distancias` para obtener el valor máximo para guardarlo en `dist_max`
-  -   inicializamos `asignaciones` con $m$ vectores vacíos
-  -   inicializamos el vector de correspondencias con $n$ posiciones, todas con valor $-1$
-  -   inicializamos `tiempo` con $5$ posiciones, todas en $0$
-  -   inicializamos `valor_objetivo` en $0$
-  
--   `void heuristica1()`: esta heurística consiste en asignar negocios al depósito más cercano: comparamos la distancia de un negocio a todos los depósitos y si se cumplen las condiciones de asignación (la demanda de ese negocio al depósito que le es mas cercano no supera la capacidad restante de este) realizamos dicha asignación, modificando los atributos correspondientes de la instancia. Sumamos la distancia de este negocio al valor objetivo. Una vez finalizada la heurística, penalizando al método por la cantidad de negocios que restan sin asignar.  
+
+-   `AssignmentInstance(std::string filename)`: método constructor.
+
+-   recorremos la sección del dataset que corresponde a las distancias y las almacenamos en `distancias`
+
+-   recorremos la sección del dataset que corresponde a las demandas y las almacenamos en `demandas`
+
+-   recorremos la sección del dataset que corresponde a las capacidades y las almacenamos en `capacidades`
+
+-   recorremos `distancias` para obtener el valor máximo para guardarlo en `dist_max`
+
+-   inicializamos `asignaciones` con $m$ vectores vacíos
+
+-   inicializamos el vector de correspondencias con $n$ posiciones, todas con valor $-1$
+
+-   inicializamos `tiempo` con $5$ posiciones, todas en $0$
+
+-   inicializamos `valor_objetivo` en $0$
+
+-   `void heuristica1()`: esta heurística consiste en asignar negocios al depósito más cercano: comparamos la distancia de un negocio a todos los depósitos y si se cumplen las condiciones de asignación (la demanda de ese negocio al depósito que le es mas cercano no supera la capacidad restante de este) realizamos dicha asignación, modificando los atributos correspondientes de la instancia. Sumamos la distancia de este negocio al valor objetivo. Una vez finalizada la heurística, penalizando al método por la cantidad de negocios que restan sin asignar.\
+
 -   `void heuristica2()`: aplica la heurística 2 cuyo funcionamiento ya fue explicado
+
 -   `void busqueda1()`: aplica la búsqueda local 1 cuyo funcionamiento ya fue explicado
+
 -   `void busqueda2()`: aplica la búsqueda local 2 cuyo funcionamiento ya fue explicado
+
 -   `void metaheuristica(bool i)`: aplica la metaheurística (si $i$ es verdadero se realiza la metaheurística con la solución inicial siendo la de la heurística 1 y si no se realiza la metaheurística con la solución inicial siendo la de la heurística 2) cuyo funcionamiento ya fue explicado
+
 -   `vector<int> ordenamiento(vector<double> distancias)`: función auxiliar que utilizamos para ordenar las distancias dentro del vector de distancias en orden creciente.
--   `void crear_archivo(string nombre)`: función que escribe a un archivo el vector de asignaciones 
+
+-   `void crear_archivo(string nombre)`: función que escribe a un archivo el vector de asignaciones
+
 -   `bool condiciones_swap(int i, int j)`: función auxiliar que evalúa las condiciones para realizar el operador `swap`.
+
+##### Compilación
+
+Para compilar el proyecto:
+
+1.  Abrir una terminal en el directorio del TP. Ej: `C:\Users\juani\OneDrive\Escritorio\TD5\TDV_TP2\src`
+
+2.  Correr el comando *make*, el cual prepara los ejecutables para correr el comando */gap_simulator*
+
+3.  Deberían entonces generarse los archivos .csv con el output de los distintos métodos
+
+4.  Aclaración: alteramos el archivo MakeFile para agregar en SRC a *instance.cpp*, la clase que generamos

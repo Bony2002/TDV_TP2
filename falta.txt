@@ -1,3 +1,0 @@
-si quizas en la h2 se pueden ordenar antes los depositos por distancia promedio asi evitas arrancar por uno que sea re alejado
-ver que hacer en relocate con los negocios que no fueron asignados a nadie
-es legal ese swap()?
