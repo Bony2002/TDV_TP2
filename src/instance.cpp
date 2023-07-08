@@ -85,11 +85,9 @@ void AssignmentInstance::heuristica1(){
         }
     }      
     crear_archivo("asignaciones_heuristica_1.txt");//generamos el output con las asignaciones
-    cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[0] = elapsed.count();
-
 }
 
 vector<int> AssignmentInstance::ordenamiento(vector<double> dist){
@@ -98,11 +96,8 @@ vector<int> AssignmentInstance::ordenamiento(vector<double> dist){
     //observemos que el vector ordenado no contiene las distancias si no que los índices de los negocios
     vector<int> ordenado={0};
     for(int i=1;i<this->n;i++){ // iteramos por los negocios, ordenado por distancia  al depósito, de menor a mayor
-
         for(int j=0;j<ordenado.size();j++){
-
             if(dist[i]<=dist[ordenado[j]]){
-
                 ordenado.insert(ordenado.begin()+j,i);
                 break;
             }
@@ -137,7 +132,6 @@ void AssignmentInstance::heuristica2(){
         }
     }      
     crear_archivo("asignaciones_heuristica_2.txt"); //generamos el output con las asignaciones
-    cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[1] = elapsed.count();
@@ -176,7 +170,6 @@ void AssignmentInstance::busqueda1(){
         }
     }
     crear_archivo("asignaciones_busqueda_local1.txt");
-    cout<<this->valor_objetivo<<endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
     this->tiempo[2] = elapsed.count();
@@ -203,7 +196,6 @@ void AssignmentInstance::busqueda2(){
             }
         }
     }
-    cout<<this->valor_objetivo<<endl;
     crear_archivo("asignaciones_busqueda_local2.txt");
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin);
@@ -243,14 +235,12 @@ void AssignmentInstance::metaheuristica(bool i){
         while(relocate){ //iteramos hasta llegar a un mínimo local del vecindario de relocate
             double reloc=this->valor_objetivo;
             busqueda1();//O(nm)
-            cout<<"Reloc:"<<valor_objetivo<<endl;
             if(reloc==valor_objetivo){relocate=false;}//una vez que el valor objetivo no mejora, sabemos que estamos en un mínimo local, pasamos al próximo operador (swap)
         }
         bool swape=true;
         while(swape){//iteramos hasta llegar a un mínimo local del vecindario de swap
             double spe=this->valor_objetivo;
             busqueda2();//O(n^2)
-            cout<<"Spe:"<<valor_objetivo<<endl;
             if(spe==valor_objetivo){swape=false;}//una vez que el valor objetivo no mejora, sabemos que estamos en un mínimo local, pasamos al próximo operador (relocate)
         }
         if (valor_objetivo==actual){//si ningun operador logró mejorar la solución, estamos en un mínimo para ambos, finaliza la búsqueda
